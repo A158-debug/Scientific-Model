@@ -7,11 +7,10 @@ import wx.grid as gridlib
 import numpy as np
 import EMCD_GUI_beta as Main_Frame
 import math, os
-import Make_Menus.Make_Main_Menu as Make_Menu
-import Load_structure.Load_structure_info as Load_Structure
+import Make_Main_Menu as Make_Menu
+import Load_structure_info as Load_Structure
 import matplotlib.pyplot as plt
 from matplotlib import rc
-
 
 rc('text', usetex=True)
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -19,17 +18,16 @@ rc('text', usetex=True)
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class Do_G_Optimization():
             def __init__(self):
-                        #wx.Frame.__init__(self, None, title= "G Optimization")
-
-            #---------------- Load the structure file ---------------------------------------------------------------------------------------------------
+                #wx.Frame.__init__(self, None, title= "G Optimization")
+                       
+                #---------------- Load the structure file ---------------------------------------------------------------------------------------------------
                         self.Author_Name = "DEVENDRA SINGH NEGI"
                         #---------------- Loading the file and extractiong the information from that file ------------------------
                         wildcard = "Structure Files (*.struct)|*.struct"
                         dialog = wx.FileDialog(None, "Open Text Files", wildcard=wildcard,
                                     style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
 
-                        if dialog.ShowModal() == wx.ID_CANCEL:
-                                    dialog.Destroy()
+                        if dialog.ShowModal() == wx.ID_CANCEL: dialog.Destroy()
                         else:
                                     self.Structure_File_Path = dialog.GetPath()
                                     self.Structure_File_Name =  os.path.basename(self.Structure_File_Path)
@@ -49,6 +47,7 @@ class Do_G_Optimization():
                                     self.X_Coordinate_List = self.Struct_Information[7]
                                     self.Y_Coordinate_List = self.Struct_Information[8]
                                     self.Z_Coordinate_List = self.Struct_Information[9]
+                                    
 
 
                         #--------------- Extracting the information from the loaded file -----------------------------------------------------------------------------------------------------------
@@ -210,7 +209,7 @@ class Do_G_Optimization():
 
 
 #************************************************************************************************************************************************************************
-#----------------------------------------- This create the first template to get the input ------------------------------------------------------------------------------------------------------------
+#----------------------------------------- This create the first template to get the input ------------------------------------------------------------------------------
 #************************************************************************************************************************************************************************
 
             def ON_FIRST_TEMPLATE(self, event):
@@ -320,8 +319,8 @@ class Do_G_Optimization():
 
 
 #**********************************************************************************************************************************************
-#----------   This makes the final template --------------------------------------------------------------------------------------------------------------------------------------------------------
-#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#----------   This makes the final template ---------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------------------------
             def ON_GO_FINAL_TEMPLATE(self, event):
 
                         #---- self argument makes them accessible on the next buttron triggering event ------------------------------------------------------------------
@@ -477,10 +476,10 @@ class Do_G_Optimization():
             def ON_DO_CALCULATE_G_OPTIMIZATION(self, event):
 
             #------ First gathering the prerequisite quantities -----------------------------------
-                        import TEM_Properties.Tem_properties as TEM
-                        import  Volume_dhkl.volume_dhkl_class as VDHKL
-                        import Lobato_Constants.Lobato_parameter as Lobato
-                        import Physics_Constans.Physics_Constant as Phys_Const
+                        import Tem_properties as TEM
+                        import  volume_dhkl_class as VDHKL
+                        import Lobato_parameter as Lobato
+                        import Physics_Constant as Phys_Const
                         #import G_Optimization.Result_Template as G_Result
                         #import G_Optimization.Result_grid_Template as G_Result_on_Grid
 
@@ -967,3 +966,9 @@ class Do_G_Optimization():
                         event.Skip()
 
 #--------------------------------------------------------------------------------------------- END -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+class_Do_G_Optimization = Do_G_Optimization()
+print(class_Do_G_Optimization.self.X_Coordinate_List)
+print(class_Do_G_Optimization.Author_Name)

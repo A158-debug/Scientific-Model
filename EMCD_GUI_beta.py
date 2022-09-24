@@ -142,7 +142,7 @@ class Create_Main_Dialog(wx.Frame):
             def ON_SHOW_MENU_BUTTON(self, event):
 
                         #------ Here I open other class which open the menu panel ----------------------
-                        import Make_Menus.Make_Main_Menu as Main_Menu
+                        import Make_Main_Menu as Main_Menu
                         Main_Menu.Make_Option_Menu().Show_Menu_Opition()
                         event.Skip()
 

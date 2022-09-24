@@ -5,17 +5,16 @@ import numpy as np
 
 class Do_Calculate_Crystal_Volume_and_dhkl:
 
-            #------- Calculate the Crystal volume with generalized formula ------------------------------------------------------------------------------------------------------------------------------------------------------
+            #------- Calculate the Crystal volume with generalized formula --------------- 
 
             def Calculate_Crystal_Volume(self, a, b, c, alpha, beta, gama):
                         #---- a,b,c are already passed as the nm distance ----------------------------------
-                        crystal_volume = (a*b*c)* np.sqrt(1 - (np.cos(np.deg2rad(alpha))**2) -  (np.cos(np.deg2rad(beta))**2)  - (np.cos(np.deg2rad(gama))**2)  \
-                                                          + 2 * (np.cos(np.deg2rad(alpha))) *  (np.cos(np.deg2rad(beta)))  * (np.cos(np.deg2rad(gama))) )
+                        crystal_volume = (a*b*c)* np.sqrt(1 - (np.cos(np.deg2rad(alpha))**2) -  (np.cos(np.deg2rad(beta))**2)  - (np.cos(np.deg2rad(gama))**2)   + 2 * (np.cos(np.deg2rad(alpha))) *  (np.cos(np.deg2rad(beta)))  * (np.cos(np.deg2rad(gama))) )
+                        
                         return crystal_volume
 
-#----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
             #----- Format : Lattice Type, miller index(hkl), lattice paramters( a,b,c,alpha, beta, gama)
+            
             def Calculate_Dhkl(self, Lattice_Type, h, k, l,  a, b, c, alpha, beta, gama):
                         #------- a,b,c should be pass in the nm distance
 
@@ -104,5 +103,7 @@ class Do_Calculate_Crystal_Volume_and_dhkl:
                                     dhkl = np.sqrt(nume / tot_denu)
 
                                     return (1/dhkl)
+
+
 
 #--------------------------------------------------------------- Done ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

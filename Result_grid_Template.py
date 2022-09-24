@@ -6,7 +6,7 @@ import EMCD_GUI_beta as Main_Frame
 import os
 import wx.grid as gridlib
 import numpy as np
-import G_Optimization.G_Optimization_class as Goptimization_Class
+import G_Optimization_class as Goptimization_Class
 
 class Make_Result_Grid(wx.Frame):
             def __init__(self):

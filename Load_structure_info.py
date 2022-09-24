@@ -1,25 +1,24 @@
-#--------------------------- This is a module file which extract the information from the input file ------------------------------------------------------------------------------------
-#----- This is done from the Regular expression library of python ---------------------------------------------------------------------------------------------------------------------------
-#--------- WILL THIS WORK FOR THE FCC ATOMS, WHERE YOU HAVE ONLY ONE ATOMS IN THE THE CENTER ------------------------------
-
+#----------------------------This is a module file which extract the information from the input file ------------------------------------------------------------------------------------
+#----- ----------------------This is done from the Regular expression library of python ---------------------------------------------------------------------------------------------------------------------------
+#--------- ------------------WILL THIS WORK FOR THE FCC ATOMS, WHERE YOU HAVE ONLY ONE ATOMS IN THE THE CENTER 
 
 import re
 import os
 
-#********************************** Class Begins from here ------------------------------------------------------------------------------------------------------------------------------------
+#********************************** Class Begins from here ********************************************************* --------------------------------------------------------------------------------------------------------------------
 
 class Extract_Structure_Info:
             def __init__(self):
                         self.My_Source_Folder = os.getcwd()
-
 
             def Extract_Info(self, Structure_File_Path):
                         Structure_File_Name = os.path.basename(Structure_File_Path)
                         File_Extension = (Structure_File_Name.split("."))[1]
 
             #----------- Directing towards the Specific format. i.e, WIEN2K, VASP, or other structure file format -------------------------------------------------------------
-            #----------- CASE 1: --- WIEN2K Structure file --------------------------------------------------------------------------------------------------------------------------------------------------
+            #----------- CASE 1: --- WIEN2K Structure file --------------------------------------------------------------------------------------------------
                         if (File_Extension =="struct"):
+                                    # print(Structure_File_Path)
                                     return self.Extract_From_WIEN2K_Format(Structure_File_Path)
 
 
@@ -27,8 +26,8 @@ class Extract_Structure_Info:
             #--------- You can add other method here to extend this class --------------------------------------------------------------------------------
 
 
-#****************************************************************************************************************************************************
-#********************* Function which extract the information from the different type of structure file -----------------------------------------------------------------
+#*****************************************************************************************************************
+#********************* Function which extract the information from the different type of structure file ----------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
             def Extract_From_WIEN2K_Format(self, WIEN2K_Structure_File_Path):
@@ -37,9 +36,7 @@ class Extract_Structure_Info:
 
                         #----------- Getting the Material Name ----------------------------------------------------------------------------
                                     Material_Name = (WIEN2K_Struct_File.readline()).split(" ")[0]
-
                                     wien2k_struct_file_info = WIEN2K_Struct_File.read()
-
                                     #Readlines_data = WIEN2K_Struct_File.readlines()
 
                         #---------- Getting the Lattice type ------------------------------------------------------------------------------------------
@@ -64,8 +61,9 @@ class Extract_Structure_Info:
                                                 Atom_Name_List.append(Atom_Name_Z[0])
                                                 Atom_Z_List.append(Atom_Name_Z[number-1])
 
-                                    #print Atom_Name_List
-                                    #print Atom_Z_List
+                                    # print(Atom_Name_List)
+                                    # print(Atom_Z_List)
+                                    
                         #----------Getting all the coordinates ---------------------------------------------------------------------------------------------------------------------
                         # ** - Make sure that the coordinate are place after x,y,z without and space, i.e, x=0.xxx, y-0.yyy, z=0.zzz
                         #
@@ -84,7 +82,8 @@ class Extract_Structure_Info:
                                                 X_Coordinate_List.append( ((X_Coordinate[i].split("="))[1] ))
                                                 Y_Coordinate_List.append( Y_Coordinate[i].split("=")[1])
                                                 Z_Coordinate_List.append( Z_Coordinate[i].split("=")[1])
-
+                                    
+                                   
                         WIEN2K_Struct_File.close()
 
                         #-------- finding the lattice paramters and angles ----------------------------------------------
@@ -95,7 +94,7 @@ class Extract_Structure_Info:
                                     Lattice_parameter_match = [line for line in Readlines_data if "MODE OF CAL" in line]
                                     index = Readlines_data.index(Lattice_parameter_match[0])
                                     lattice_index = (index+1)       #----- line number for the lattice paramter lines ---------------------
-                                    Lattice_Parameter_Angle = filter( None, (((Readlines_data)[lattice_index]).split(" ")) )
+                                    Lattice_Parameter_Angle = list(filter( None, (((Readlines_data)[lattice_index]).split(" ")) ))
 
                         Lattice_Parameter_Angle_List = []
                         #---- Converting bohr to angstron and then to the nano-meter distance -------------------------------------------
@@ -111,8 +110,24 @@ class Extract_Structure_Info:
                         WIEN2K_Struct_File.close()
 
                         #---------- Return the output to the G optimization code ----------------------------------------------------------------------------------------
+                        # print("Material_Name : ",Material_Name)
+                        # print("Lattice_Type : ",Lattice_Type)
+                        # print("Inequivalent Atoms : ",Inequivalent_Atoms)
+                        # print("Mult_List : ",Mult_List)
+                        # print("Atom_Name_List : ",Atom_Name_List)
+                        # print("Atom_Z_List : ",Atom_Z_List)
+                        # print("Lattice_Parameter_Angle_List : ", Lattice_Parameter_Angle_List)
+                        # print("X_Coordinate_List : ",X_Coordinate_List)
+                        # print("Y_Coordinate_List : ",Y_Coordinate_List)
+                        # print("Z_Coordinate_List : ",Z_Coordinate_List)
+
+                        
                         return (Material_Name, Lattice_Type, Inequivalent_Atoms, Lattice_Parameter_Angle_List, Mult_List, Atom_Name_List, Atom_Z_List, X_Coordinate_List, Y_Coordinate_List,Z_Coordinate_List)
 
 
 
                         #------------- Close the opened WIEN2K file -----------------------------------------------------------------------------------------------------------
+
+
+class_Extract_Structure_Info = Extract_Structure_Info()
+class_Extract_Structure_Info.Extract_Info('FeGe.struct')

@@ -1,7 +1,7 @@
 #--------------------- Class to generate the input template ---------------------------
 import wx
 import numpy as np
-import G_Optimization.G_Optimization_class as gopt
+import G_Optimization_class as gopt
 
 class Make_First_Template(wx.Frame):
 

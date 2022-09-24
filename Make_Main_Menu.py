@@ -86,7 +86,7 @@ class Make_Option_Menu():
                                     dlg.Destroy()
 
                         if val == wx.ID_OK:
-                                    import G_Optimization.G_Optimization_class as GOPTI
+                                    import G_Optimization_class as GOPTI
                                     GOPTI.Do_G_Optimization()
 
                         event.Skip()
