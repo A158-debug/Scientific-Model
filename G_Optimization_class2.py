@@ -2,6 +2,7 @@
 #    This module is called by the main menu option to do the G optimizatio calculation -------------------------------------------------------------------------
 #  ****************************************************************************************************************************************
 from __future__ import division
+from turtle import position
 import numpy as np
 import EMCD_GUI_beta as Main_Frame
 import math, os
@@ -35,17 +36,32 @@ class Do_G_Optimization2():
                 self.Material_Name_From_File = self.Struct_Information[0]
                 self.Lattice_Type_From_File = self.Struct_Information[1]
                 self.Inequivalent_Atom_From_File = int(self.Struct_Information[2])
-                self.Lattice_Parameter_Angle_List = self.Struct_Information[3]
+                self.Lattice_Parameter = self.Struct_Information[3]
                 self.Multiplicity_List_From_File = self.Struct_Information[4]
                 self.Atom_Name_List = self.Struct_Information[5]
                 self.Atom_Z_LIST = self.Struct_Information[6]
                 self.X_Coordinate_List = self.Struct_Information[7]
                 self.Y_Coordinate_List = self.Struct_Information[8]
                 self.Z_Coordinate_List = self.Struct_Information[9]
-                self.anm = *1e-9                   #------ Lattice parameter are in nanometer
-                self.bnm = float( self.Y_Coordinate_List)*1e-9                   #----- Lattice parameter are in nanometer
-                self.cnm = float(self.lattice_c.GetValue())*1e-9                    # --- Lattice parameter are in nanometer
-
+                
+                #------ Lattice parameter are in nanometer
+                self.anm = float(  self.Lattice_Parameter[0])*1e-9                   #----- Lattice parameter are in nanometer
+                self.bnm = float(  self.Lattice_Parameter[1])*1e-9                   #----- Lattice parameter are in nanometer
+                self.cnm = float( self.Lattice_Parameter[2])*1e-9                    # --- Lattice parameter are in nanometer
+                
+                self.angle_alpha = self.Lattice_Parameter[3]                         # --- Lattice parameter are in degree
+                self.angle_beta = self.Lattice_Parameter[4]                          # --- Lattice parameter are in degree
+                self.angle_gama = self.Lattice_Parameter[5]                          # --- Lattice parameter are in degree
+                
+                
+                self.accel_voltage = 300
+                self.Atom_Multiplicty_List = self.Multiplicity_List_From_File        # Multiplicity of individual Atoms
+                self.Magnetic_Atom_List = [True,True,True,True]                      # Boolean value (True/False ) Obtained from the check box
+                self.inequiv_atoms = self.Inequivalent_Atom_From_File
+                self.Lattice_Type =  self.Lattice_Type_From_File
+                
+                
+        
 #*********************************************************************************************************************************************
 #---------------------------------------- Final Calculation binding function -----------------------------------------------------------------
 #*********************************************************************************************************************************************
@@ -62,34 +78,39 @@ class Do_G_Optimization2():
             #******** Here according to kirkland book the electron unit (1.6e19) is converted to volt-angstrom:- 14.4 volt-angstrom
                 self.Vg_Prefactor = ((47.86*1e-20) / (self.Crystal_Volume))
             #************************************************************************************************************************************
-
-            #---- Grabbing all text_ctrl for getting the input from the user ---------------------------------------------------------------------------------------------
-                # self.coordinate_txtctrl = [widget for widget in self.Final_Template_Panel.GetChildren() if isinstance(widget, wx.TextCtrl)]
-
-                        #----------- To obtain the Max Partial Structure Factor (PSF) and corrosponding (hkl) and extinction distance ---------------------
-                Max_PSF = 0
-                self.MAX_PSF_Relation = np.zeros((1,5))  #--- Index (h,k,l,Max_PSF, Extinction_distance )
-
+                self.atom_position_dict = {}
+                for ineqiv_atom_index in range(self.inequiv_atoms):
+                        atom_position_list = []
+                        for mult_index in range(int(self.Atom_Multiplicty_List[ineqiv_atom_index])):
+                                atom_position_list.append(self.X_Coordinate_List[mult_index])      
+                                atom_position_list.append(self.Y_Coordinate_List[mult_index])      
+                                atom_position_list.append(self.Z_Coordinate_List[mult_index])          
+                                self.atom_position_dict["{0}atom{0}".format(ineqiv_atom_index+1,mult_index+1)] = atom_position_list
+                     
             #************ Getting spin alignment of every atoms -------------------------------------------------------------------------------------------------------------------------
 
-                Spin_check_list = [check_widget.GetValue() for check_widget in self.Final_Template_Panel.GetChildren() if isinstance(check_widget, wx.CheckBox)]
-                Spin_Alignment_List = []
+                # Spin_check_list = [check_widget.GetValue() for check_widget in self.Final_Template_Panel.GetChildren() if isinstance(check_widget, wx.CheckBox)]
+                # Spin_Alignment_List = []
 
-                for check_index in range(0, int(len(Spin_check_list)), 2):
-                            up_spin = Spin_check_list[check_index]
-                            if (up_spin == True):
-                                                Spin_Alignment_List.append(1)
-                                    #---- Putting spin dn as -1 in the Partial structure factor --------------------------------------------------------------------------------------------
-                            dn_spin = Spin_check_list[check_index + 1]
-                            if (dn_spin == True):
-                                                Spin_Alignment_List.append(-1)
+                # for check_index in range(0, int(len(Spin_check_list)), 2):
+                #         up_spin = Spin_check_list[check_index]
+                #         if (up_spin == True):
+                #                 Spin_Alignment_List.append(1)
+                #         #---- Putting spin dn as -1 in the Partial structure factor --------------------------------------------------------------------------------------------
+                #         dn_spin = Spin_check_list[check_index + 1]
+                #         if (dn_spin == True):
+                #                 Spin_Alignment_List.append(-1)
 
             #-------------------------------------------------------------------------------------------------------------------------------------------------------------
             #---------------- Calculating the Vg, Excitation coefficient, Partial Structure Factor starts from here -------------------------------------------------------
-
+                self.h = 4
+                self.k = 4
+                self.l = 4
+                
                 self.h_list = []
                 self.k_list = []
                 self.l_list = []
+                
                 self.Vg_list = []
                 self.phase_list = []
                 self.PSF_list = []
@@ -97,14 +118,14 @@ class Do_G_Optimization2():
                 self.EMCD_Optimized_Paramter_list = []
                 self.ch = (0 + 0j)
             #---------- Starting to calculate the various parameter for every G(hkl) vector ---------------------------------------------------------------------------------------
-
+ 
                 for h_index in range( self.h, -(self.h+1), -1):
                         for k_index in range( self.k, -(self.k +1), -1):
                                 for l_index in range(self.l,  -(self.l +1), -1):
                                         if (h_index == 0 and k_index ==0 and l_index ==0 ):
                                                 continue
                                         else:
-                                                self.g_magnitude =  VDHKL.Do_Calculate_Crystal_Volume_and_dhkl().Calculate_Dhkl(self.Lattice_type, h_index, k_index, l_index, self.anm, self.bnm, self.cnm, self.angle_alpha, self.angle_gama, self.angle_gama)
+                                                self.g_magnitude =  VDHKL.Do_Calculate_Crystal_Volume_and_dhkl().Calculate_Dhkl(self.Lattice_Type_From_File, h_index, k_index, l_index, self.anm, self.bnm, self.cnm, self.angle_alpha, self.angle_gama, self.angle_gama)
                                         
                                                  #----------- Setting the counter and Variable. Variabl are being Rest for next (hkl) values -----------------------
                                                 counter_coordinate = 0
@@ -115,29 +136,32 @@ class Do_G_Optimization2():
 
                                                 for atom_index in range(int(self.inequiv_atoms)):
 
-                                                        Z_Number = int(self.Atoms_Z_List[atom_index])
-                                                        self.Lobato_Inst =Lobato.Lobato_parameter()
-                                                        self.Lobato_Inst.Get_Parameters(Z_Number)
+                                                        # Z_Number = int(self.Atom_Z_LIST[atom_index])
+                                                        Z_Number = self.Atom_Z_LIST[atom_index]
+                                                        self.Lobato_Inst =Lobato.Lobato_parameter(Z_Number)
+                                                        self.Lobato_Inst.Get_Parameters()
                                                         self.Lobato_Ai = self.Lobato_Inst.ai
                                                         self.Lobato_Bi = self.Lobato_Inst.bi
 
                                                         #------------- Find the total Electron scattering factor for particular atoms --------------------------------------
                                                         #------------- Since there are 5 differnt ai,bi numbers in the Lobato list -------------------------------------------
                                                         self.Lobato_Scattering_Factor = 0
+                                                  
                                                         for lobato_index in range(5):
                                                                 ai = self.Lobato_Ai[lobato_index] * (1e-10)   #-- Since the unit of ai = 1e-10
                                                                 bi = self.Lobato_Bi[lobato_index] * (1e-20)   #- Since the unit of  bi = 1e-20
                                                                 lobato_nume =  ( ai * (2 + (bi*(self.g_magnitude**2)) ))
                                                                 lobato_deno =   ((1 + (bi*(self.g_magnitude**2)))**2)
                                                                 lobato_scattering_factor = (lobato_nume/lobato_deno)
-                                                                self.Lobato_Scattering_Factor = self.Lobato_Scattering_Factor + lobato_scattering_factor
-
+                                                                self.Lobato_Scattering_Factor +=  lobato_scattering_factor
+                                                               
+                                                               
 
                                                                 #----- Getting all the co-ordinates of all the atoms ---------------------------------------------------------------------------
                                                                 for mult_index in range(int(self.Atom_Multiplicty_List[atom_index])):
-                                                                        x_coordinate = float(self.coordinate_txtctrl[counter_coordinate].GetValue())
-                                                                        y_coordinate = float(self.coordinate_txtctrl[counter_coordinate + 1].GetValue())
-                                                                        z_coordinate = float(self.coordinate_txtctrl[counter_coordinate + 2].GetValue())
+                                                                        x_coordinate = float(self.X_Coordinate_List[counter_coordinate])
+                                                                        y_coordinate = float(self.Y_Coordinate_List[counter_coordinate + 1])
+                                                                        z_coordinate = float(self.Z_Coordinate_List[counter_coordinate + 2])
 
                                                                         #print x_coordinate, y_coordinate, z_coordinate
                                                                         GU = (h_index*x_coordinate + k_index*y_coordinate + l_index*z_coordinate)
@@ -150,6 +174,9 @@ class Do_G_Optimization2():
                                                                                 self.Magnetic_Atoms_Basis_List.append(x_coordinate)
                                                                                 self.Magnetic_Atoms_Basis_List.append(y_coordinate)
                                                                                 self.Magnetic_Atoms_Basis_List.append(z_coordinate)
+
+
+
 
                                                         #------ Fourier component of crystal potential ------------------------------------------------------------------------------------------
                                                         self.VG = self.FSCATT * self.Vg_Prefactor

@@ -325,9 +325,9 @@ class Do_G_Optimization():
 
                         #---- self argument makes them accessible on the next buttron triggering event ------------------------------------------------------------------
                         self.Atoms_Name_List = []                     # String values, Name of the Atoms
-                        self.Atoms_Z_List = []                            # Atomic Numbers of the Atoms
+                        self.Atoms_Z_List = []                        # Atomic Numbers of the Atoms
                         self.Atom_Multiplicty_List = []               # Multiplicity of individual Atoms
-                        self.Magnetic_Atom_List = []                 # Boolean value (True/False ) Obtained from the check box -----------------------------------
+                        self.Magnetic_Atom_List = []                  # Boolean value (True/False ) Obtained from the check box -----------------------------------
 
                         counter_txtctrl = 0
                         #*****************************************************************************************************************************
@@ -553,7 +553,7 @@ class Do_G_Optimization():
                                                             for atom_index in range(int(self.inequiv_atoms)):
 
                                                                         Z_Number = int(self.Atoms_Z_List[atom_index])
-                                                                        self.Lobato_Inst =Lobato.Lobato_parameter()
+                                                                        self.Lobato_Inst = Lobato.Lobato_parameter()
                                                                         self.Lobato_Inst.Get_Parameters(Z_Number)
                                                                         self.Lobato_Ai = self.Lobato_Inst.ai
                                                                         self.Lobato_Bi = self.Lobato_Inst.bi

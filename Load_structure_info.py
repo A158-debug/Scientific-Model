@@ -43,11 +43,13 @@ class Extract_Structure_Info:
                                     Lattice_Type_Info = (re.findall(r'.*NONEQUIV*.+\s', wien2k_struct_file_info))
                                     Lattice_Type =  Lattice_Type_Info[0].split(" ")[0]
                                     Inequivalent_Atoms = int( [x for x in Lattice_Type_Info[0].split(" ") if x.isdigit()][0])
+                                    # print("Inequivalent atoms :",Inequivalent_Atoms)
 
 
                         #----------- Making the list of the multiplicity from the file -------------------------------------------------------
 
                                     Mult_List = re.findall(r'MULT=\s+([0-9]*)', wien2k_struct_file_info)
+                                    # print("Mult_List :", Mult_List)
                                     #print Mult_List
                         #---------- Find the atom Name and the atomic number ---------------------------------------------------------
 
@@ -110,16 +112,16 @@ class Extract_Structure_Info:
                         WIEN2K_Struct_File.close()
 
                         #---------- Return the output to the G optimization code ----------------------------------------------------------------------------------------
-                        print("Material_Name : ",Material_Name)
-                        print("Lattice_Type : ",Lattice_Type)
-                        print("Inequivalent Atoms : ",Inequivalent_Atoms)
-                        print("Mult_List : ",Mult_List)
-                        print("Atom_Name_List : ",Atom_Name_List)
-                        print("Atom_Z_List : ",Atom_Z_List)
-                        print("Lattice_Parameter_Angle_List : ", Lattice_Parameter_Angle_List)
-                        print("X_Coordinate_List : ",X_Coordinate_List)
-                        print("Y_Coordinate_List : ",Y_Coordinate_List)
-                        print("Z_Coordinate_List : ",Z_Coordinate_List)
+                        # print("Material_Name : ",Material_Name)
+                        # print("Lattice_Type : ",Lattice_Type)
+                        # print("Inequivalent Atoms : ",Inequivalent_Atoms)
+                        # print("Mult_List : ",Mult_List)
+                        # print("Atom_Name_List : ",Atom_Name_List)
+                        # print("Atom_Z_List : ",Atom_Z_List)
+                        # print("Lattice_Parameter : ", Lattice_Parameter_Angle_List)
+                        # print("X_Coordinate_List : ",X_Coordinate_List)
+                        # print("Y_Coordinate_List : ",Y_Coordinate_List)
+                        # print("Z_Coordinate_List : ",Z_Coordinate_List)
 
                         
                         return (Material_Name, Lattice_Type, Inequivalent_Atoms, Lattice_Parameter_Angle_List, Mult_List, Atom_Name_List, Atom_Z_List, X_Coordinate_List, Y_Coordinate_List,Z_Coordinate_List)
