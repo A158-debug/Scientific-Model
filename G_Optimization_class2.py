@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rc
 import Tem_properties as TEM
 import  volume_dhkl_class as VDHKL
-import Lobato_parameter as Lobato
+from Lobato_parameter import Lobato_parameter1 as Lobato
 import Physics_Constant as Phys_Const
 
 rc('text', usetex=True)
@@ -56,7 +56,7 @@ class Do_G_Optimization2():
                 
                 self.accel_voltage = 300
                 self.Atom_Multiplicty_List = self.Multiplicity_List_From_File        # Multiplicity of individual Atoms
-                self.Magnetic_Atom_List = [True,True,True,True]                      # Boolean value (True/False ) Obtained from the check box
+                self.Magnetic_Atom_List = [True,False]                      # Boolean value (True/False ) Obtained from the check box
                 self.inequiv_atoms = self.Inequivalent_Atom_From_File
                 self.Lattice_Type =  self.Lattice_Type_From_File
                 
@@ -77,6 +77,10 @@ class Do_G_Optimization2():
 
             #******** Here according to kirkland book the electron unit (1.6e19) is converted to volt-angstrom:- 14.4 volt-angstrom
                 self.Vg_Prefactor = ((47.86*1e-20) / (self.Crystal_Volume))
+                
+                
+                Max_PSF = 0
+                self.MAX_PSF_Relation = np.zeros((1,5))  #--- Index (h,k,l,Max_PSF, Extinction_distance )
             #************************************************************************************************************************************
                 self.atom_position_dict = {}
                 for ineqiv_atom_index in range(self.inequiv_atoms):
@@ -89,17 +93,17 @@ class Do_G_Optimization2():
                      
             #************ Getting spin alignment of every atoms -------------------------------------------------------------------------------------------------------------------------
 
-                # Spin_check_list = [check_widget.GetValue() for check_widget in self.Final_Template_Panel.GetChildren() if isinstance(check_widget, wx.CheckBox)]
-                # Spin_Alignment_List = []
+                Spin_check_list = [True, False, True, False, True, False, True, False]
+                Spin_Alignment_List = []
 
-                # for check_index in range(0, int(len(Spin_check_list)), 2):
-                #         up_spin = Spin_check_list[check_index]
-                #         if (up_spin == True):
-                #                 Spin_Alignment_List.append(1)
-                #         #---- Putting spin dn as -1 in the Partial structure factor --------------------------------------------------------------------------------------------
-                #         dn_spin = Spin_check_list[check_index + 1]
-                #         if (dn_spin == True):
-                #                 Spin_Alignment_List.append(-1)
+                for check_index in range(0, int(len(Spin_check_list)), 2):
+                        up_spin = Spin_check_list[check_index]
+                        if (up_spin == True):
+                                Spin_Alignment_List.append(1)
+                        #---- Putting spin dn as -1 in the Partial structure factor --------------------------------------------------------------------------------------------
+                        dn_spin = Spin_check_list[check_index + 1]
+                        if (dn_spin == True):
+                                Spin_Alignment_List.append(-1)
 
             #-------------------------------------------------------------------------------------------------------------------------------------------------------------
             #---------------- Calculating the Vg, Excitation coefficient, Partial Structure Factor starts from here -------------------------------------------------------
@@ -136,17 +140,13 @@ class Do_G_Optimization2():
 
                                                 for atom_index in range(int(self.inequiv_atoms)):
 
-                                                        # Z_Number = int(self.Atom_Z_LIST[atom_index])
-                                                        Z_Number = self.Atom_Z_LIST[atom_index]
-                                                        self.Lobato_Inst =Lobato.Lobato_parameter(Z_Number)
-                                                        self.Lobato_Inst.Get_Parameters()
-                                                        self.Lobato_Ai = self.Lobato_Inst.ai
-                                                        self.Lobato_Bi = self.Lobato_Inst.bi
-
+                                                        Z_Number = float(self.Atom_Z_LIST[atom_index])
+                                                        self.Lobato_Ai, self.Lobato_Bi = Lobato(Z_Number)
+                                
                                                         #------------- Find the total Electron scattering factor for particular atoms --------------------------------------
                                                         #------------- Since there are 5 differnt ai,bi numbers in the Lobato list -------------------------------------------
                                                         self.Lobato_Scattering_Factor = 0
-                                                  
+                                                     
                                                         for lobato_index in range(5):
                                                                 ai = self.Lobato_Ai[lobato_index] * (1e-10)   #-- Since the unit of ai = 1e-10
                                                                 bi = self.Lobato_Bi[lobato_index] * (1e-20)   #- Since the unit of  bi = 1e-20
@@ -156,113 +156,108 @@ class Do_G_Optimization2():
                                                                 self.Lobato_Scattering_Factor +=  lobato_scattering_factor
                                                                
                                                                
+                                                        #----- Getting all the co-ordinates of all the atoms ---------------------------------------------------------------------------
+                                                        for mult_index in range(int(self.Atom_Multiplicty_List[atom_index])):
+                                                                x_coordinate = float(self.X_Coordinate_List[mult_index])
+                                                                y_coordinate = float(self.Y_Coordinate_List[mult_index])
+                                                                z_coordinate = float(self.Z_Coordinate_List[mult_index])
 
-                                                                #----- Getting all the co-ordinates of all the atoms ---------------------------------------------------------------------------
-                                                                for mult_index in range(int(self.Atom_Multiplicty_List[atom_index])):
-                                                                        x_coordinate = float(self.X_Coordinate_List[counter_coordinate])
-                                                                        y_coordinate = float(self.Y_Coordinate_List[counter_coordinate + 1])
-                                                                        z_coordinate = float(self.Z_Coordinate_List[counter_coordinate + 2])
-
-                                                                        #print x_coordinate, y_coordinate, z_coordinate
-                                                                        GU = (h_index*x_coordinate + k_index*y_coordinate + l_index*z_coordinate)
-                                                                        exp_factor = np.exp( (0 +1j)*(2*np.pi*GU))
-                                                                        self.FSCATT = self.FSCATT + (self.Lobato_Scattering_Factor * exp_factor)
-                                                                        counter_coordinate += 3
-
-                                                                        #------- Extracting only coordinates of the magnetic atoms -----------------------------------------------
-                                                                        if (bool(self.Magnetic_Atom_List[atom_index])==True):
-                                                                                self.Magnetic_Atoms_Basis_List.append(x_coordinate)
-                                                                                self.Magnetic_Atoms_Basis_List.append(y_coordinate)
-                                                                                self.Magnetic_Atoms_Basis_List.append(z_coordinate)
+                                                                #print x_coordinate, y_coordinate, z_coordinate
+                                                                GU = (h_index*x_coordinate + k_index*y_coordinate + l_index*z_coordinate)
+                                                                exp_factor = np.exp( (0 +1j)*(2*np.pi*GU))
+                                                                self.FSCATT = self.FSCATT + (self.Lobato_Scattering_Factor * exp_factor)
+                                                                
+                                                                #------- Extracting only coordinates of the magnetic atoms -----------------------------------------------
+                                                                if (bool(self.Magnetic_Atom_List[atom_index])==True):
+                                                                        self.Magnetic_Atoms_Basis_List.append(x_coordinate)
+                                                                        self.Magnetic_Atoms_Basis_List.append(y_coordinate)
+                                                                        self.Magnetic_Atoms_Basis_List.append(z_coordinate)
 
 
-
-
-                                                        #------ Fourier component of crystal potential ------------------------------------------------------------------------------------------
-                                                        self.VG = self.FSCATT * self.Vg_Prefactor
-                                                        self.VG_Real_Part = self.VG.real
-                                                        self.VG_Imaginary_Part = self.VG.imag
-                                                        self.VG_Phase = math.atan(self.VG_Imaginary_Part/self.VG_Real_Part)
-                                                        #print h_index, k_index, l_index, self.VG, self.Vg_Prefactor
+                                                #------ Fourier component of crystal potential ------------------------------------------------------------------------------------------
+                                                self.VG = self.FSCATT * self.Vg_Prefactor
+                                                self.VG_Real_Part = self.VG.real
+                                                self.VG_Imaginary_Part = self.VG.imag
+                                                self.VG_Phase = math.atan(self.VG_Imaginary_Part/self.VG_Real_Part)
+                                                #print h_index, k_index, l_index, self.VG, self.Vg_Prefactor
 
                                                 #****************************** <<  Magnetic Partial Structure Factor >> **********************************
                                                 #------------- Finding the partial structure factor for the magnetic atoms ---------------------------------------------------------------
-                                                        counter_basis_position = 0          #-- Counter for the magnetic atom coordinate ----------------------------------------
-                                                        spin_counter = 0                    #-- Counter for the spin up/dn -------------------------------------------------------------------
-                                                        for magnetic_atom_index in range(int(len(self.Magnetic_Atoms_Basis_List)/3 )):   #--- Since xyz(3)
-                                                                magnetic_cord_x = self.Magnetic_Atoms_Basis_List[counter_basis_position]
-                                                                magnetic_cord_y = self.Magnetic_Atoms_Basis_List[counter_basis_position +1]
-                                                                magnetic_cord_z = self.Magnetic_Atoms_Basis_List[counter_basis_position + 2]
+                                                counter_basis_position = 0          #-- Counter for the magnetic atom coordinate ----------------------------------------
+                                                spin_counter = 0                    #-- Counter for the spin up/dn -------------------------------------------------------------------
+                                                for magnetic_atom_index in range(int(len(self.Magnetic_Atoms_Basis_List)/3 )):   #--- Since xyz(3)
+                                                        magnetic_cord_x = self.Magnetic_Atoms_Basis_List[counter_basis_position]
+                                                        magnetic_cord_y = self.Magnetic_Atoms_Basis_List[counter_basis_position +1]
+                                                        magnetic_cord_z = self.Magnetic_Atoms_Basis_List[counter_basis_position + 2]
 
-                                                                mag_GU = ( (h_index*magnetic_cord_x) +  (k_index*magnetic_cord_y) + (l_index*magnetic_cord_z) )
+                                                        mag_GU = ( (h_index*magnetic_cord_x) +  (k_index*magnetic_cord_y) + (l_index*magnetic_cord_z) )
 
-                                                                #------------------------ Multiplying -1 for the antiferromagnetic alignment --------------------------------------------------
-                                                                #self.PSF = self.PSF + ( (np.exp( (0+1j) * ( (2 * np.pi * mag_GU) + self.VG_Phase))) * Spin_Alignment_List[spin_counter])
+                                                        #------------------------ Multiplying -1 for the antiferromagnetic alignment --------------------------------------------------
+                                                        #self.PSF = self.PSF + ( (np.exp( (0+1j) * ( (2 * np.pi * mag_GU) + self.VG_Phase))) * Spin_Alignment_List[spin_counter])
 
-                                                                self.PSF = self.PSF +( ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ) * Spin_Alignment_List[spin_counter])
+                                                        self.PSF = self.PSF +( ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ) * Spin_Alignment_List[spin_counter])
                                                                 
-                                                                #----- Just for the debugging purpose to check whether -1 being included or not, its working -----------------------------------------
-                                                                #print Spin_Alignment_List[spin_counter],   ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ) , ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ) * Spin_Alignment_List[spin_counter]
-                                                                #------------------------- Just for the debugging purpose ----------------------------------------------------------------------------------------------------------
-                                                                #if ( (h_index == 4)  and (k_index == 4) and (l_index == 4)  ):
-                                                                #print self.PSF,  ( ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) )), ( ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ) * Spin_Alignment_List[spin_counter])
-                                                                #print ( ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ))
+                                                        #----- Just for the debugging purpose to check whether -1 being included or not, its working -----------------------------------------
+                                                        #print Spin_Alignment_List[spin_counter],   ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ) , ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ) * Spin_Alignment_List[spin_counter]
+                                                        #------------------------- Just for the debugging purpose ----------------------------------------------------------------------------------------------------------
+                                                        #if ( (h_index == 4)  and (k_index == 4) and (l_index == 4)  ):
+                                                        #print self.PSF,  ( ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) )), ( ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ) * Spin_Alignment_List[spin_counter])
+                                                        #print ( ((np.exp((0 - 1j) * ((2 * np.pi * mag_GU) + self.VG_Phase))) ))
 
-                                                                spin_counter += 1
-                                                                counter_basis_position += 3
+                                                        spin_counter += 1
+                                                        counter_basis_position += 3
 
 
-                                                        self.PSF_Real = self.PSF.real
-                                                        self.PSF_Imaginary = self.PSF.imag
+                                                self.PSF_Real = self.PSF.real
+                                                self.PSF_Imaginary = self.PSF.imag
 
-                                                        #*****************************************************************************************************************
-                                                        #---------------- Calculating the Extinction distance for particular G(hkl) vector -------------------------------------------------------------
-                                                        Bragg_angle = (np.arcsin(((self.Relativistic_Wave_Length * self.g_magnitude) / 2)))
-                                                        Ext_nume = (np.pi * self.Crystal_Volume * np.cos(Bragg_angle/2))
-                                                        Ext_denu = (self.Relativistic_Wave_Length * np.abs(self.FSCATT))
-                                                        self.Extinction_distance = (Ext_nume / Ext_denu)
+                                                #*****************************************************************************************************************
+                                                #---------------- Calculating the Extinction distance for particular G(hkl) vector -------------------------------------------------------------
+                                              
+                                                Bragg_angle = (np.arcsin(((self.Relativistic_Wave_Length * self.g_magnitude) / 2)))
+                                                Ext_nume = (np.pi * self.Crystal_Volume * np.cos(Bragg_angle/2))
+                                                Ext_denu = (self.Relativistic_Wave_Length * np.abs(self.FSCATT))
+                                                self.Extinction_distance = (Ext_nume / Ext_denu)
 
-                                                        # Calculating the Optimized paramter as given in the paper [ Thickness_Function * Magnetic_Structure_Factor] ---
-                                                        #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                # Calculating the Optimized paramter as given in the paper [ Thickness_Function * Magnetic_Structure_Factor] ---------
+                                                #---------------------------------------------------------------------------------------------------------------------
+                                                self.material_thickness_nm= 5
+                                                self.emcd_optimized_parameter =( (self.Extinction_distance / (np.pi * self.cnm))  *  ((np.sin(((np.pi * self.material_thickness_nm)/(self.Extinction_distance))))**2)  \
+                                                                                * (abs(self.PSF_Real)) )
 
-                                                        self.emcd_optimized_parameter =( (self.Extinction_distance / (np.pi * self.cnm))  *  ((np.sin(((np.pi * self.material_thickness_nm)/(self.Extinction_distance))))**2)  \
-                                                                        * (abs(self.PSF_Real)) )
+                                                #print h_index, k_index, l_index,  self.material_thickness_nm, ((self.Extinction_distance / (np.pi * self.cnm))),  ((np.sin(((np.pi * self.material_thickness_nm)/(self.Extinction_distance))))**2)
+                                                #----- This is used later to extract some quantities -----------------------------------------------------------------------------------
+                                                self.h_list.append(h_index)
+                                                self.k_list.append(k_index)
+                                                self.l_list.append(l_index)
+                                                self.Vg_list.append(np.abs(self.VG))
+                                                self.PSF_list.append(abs(self.PSF_Real))
+                                                self.phase_list.append(self.VG_Phase)
+                                                self.Extinction_distance_list.append(self.Extinction_distance/1e-9)              #---- Extinction distance in nano-meter
+                                                self.EMCD_Optimized_Paramter_list.append( self.emcd_optimized_parameter )
+                                                #ap.AppendText("\t %s \t %s \t %s \t  %s \t %s, \t  %s, \t  %s \n" % (h_index, k_index, l_index, self.VG, self.VG_Phase, self.PSF, self.Extinction_distance/1e-9))
 
-                                                        #print h_index, k_index, l_index,  self.material_thickness_nm, ((self.Extinction_distance / (np.pi * self.cnm))),  ((np.sin(((np.pi * self.material_thickness_nm)/(self.Extinction_distance))))**2)
-                                                        #----- This is used later to extract some quantities -----------------------------------------------------------------------------------
-
-                                                        self.h_list.append(h_index)
-                                                        self.k_list.append(k_index)
-                                                        self.l_list.append(l_index)
-                                                        self.Vg_list.append(np.abs(self.VG))
-                                                        self.PSF_list.append(abs(self.PSF_Real))
-                                                        self.phase_list.append(self.VG_Phase)
-                                                        self.Extinction_distance_list.append(self.Extinction_distance/1e-9)  #---- Extinction distance in nano-meter
-                                                        self.EMCD_Optimized_Paramter_list.append( self.emcd_optimized_parameter )
-
-                                                        #ap.AppendText("\t %s \t %s \t %s \t  %s \t %s, \t  %s, \t  %s \n" % (h_index, k_index, l_index, self.VG, self.VG_Phase, self.PSF, self.Extinction_distance/1e-9))
-
-            #-------- Printing the Final obtained Highest PSF and corrosponding (hkl) and the Extinction distance ----------------------------------
+            #-------- ------------Printing the Final obtained Highest PSF and corrosponding (hkl) and the Extinction distance ----------------------------------
             # ------------------- Finding the Max PSF and corrosponding (hkl) and Extinction distance ----------------------------------------------------------------------
-                                                        if ((h_index ==0 ) and (k_index ==0 ) and (l_index ==0 ) ):
-                                                                continue
+                                                if ((h_index ==0 ) and (k_index ==0 ) and (l_index ==0 ) ):
+                                                        continue
 
-                                                        elif ( np.abs(self.PSF_Real) > Max_PSF   ):
-                                                                Max_PSF = np.abs(self.PSF_Real)
-                                                                self.MAX_PSF_Relation[0, 0] = h_index
-                                                                self.MAX_PSF_Relation[0, 1] = k_index
-                                                                self.MAX_PSF_Relation[0, 2] = l_index
-                                                                self.MAX_PSF_Relation[0, 3] = Max_PSF
-                                                                self.MAX_PSF_Relation[0, 4] = self.Extinction_distance
+                                                elif ( np.abs(self.PSF_Real) > Max_PSF   ):
+                                                        Max_PSF = np.abs(self.PSF_Real)
+                                                        self.MAX_PSF_Relation[0, 0] = h_index
+                                                        self.MAX_PSF_Relation[0, 1] = k_index
+                                                        self.MAX_PSF_Relation[0, 2] = l_index
+                                                        self.MAX_PSF_Relation[0, 3] = Max_PSF
+                                                        self.MAX_PSF_Relation[0, 4] = self.Extinction_distance
 
-                        #---------- Find the max values ------------------------------------------------------------------------------------------------------------------------------------------------
+                #---------- Find the max values ------------------------------------------------------------------------------------------------------------------------------------------------
                 h_max = int(self.MAX_PSF_Relation[:,0])
                 k_max = int(self.MAX_PSF_Relation[:,1])
                 l_max = int(self.MAX_PSF_Relation[:,2])
                 max_psf = float(self.MAX_PSF_Relation[:,3])
                 max_ext = float(self.MAX_PSF_Relation[:, 4])/1e-9
 
-            #---------- Printing the maximum values as the information dialog -----------------------------------------------------------------------------------------------------
+        #---------- Printing the maximum values as the information dialog -----------------------------------------------------------------------------------------------------
                 print("h_max : ", h_max)
                 print("k_max : ", k_max)
                 print("l_max : ", l_max)

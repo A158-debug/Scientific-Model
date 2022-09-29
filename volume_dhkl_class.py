@@ -2,6 +2,7 @@
 #
 from __future__ import division
 import numpy as np
+import Load_structure_info as Load_Structure
 
 class Do_Calculate_Crystal_Volume_and_dhkl:
 
@@ -17,7 +18,7 @@ class Do_Calculate_Crystal_Volume_and_dhkl:
             
             def Calculate_Dhkl(self, Lattice_Type, h, k, l,  a, b, c, alpha, beta, gama):
                         #------- a,b,c should be pass in the nm distance
-
+                      
                         sinalpha = np.sin(np.deg2rad(alpha))
                         sinbeta = np.sin(np.deg2rad(beta))
                         singama = np.sin(np.deg2rad(gama))
@@ -25,14 +26,15 @@ class Do_Calculate_Crystal_Volume_and_dhkl:
                         cosalpha = np.cos(np.deg2rad(alpha))
                         cosbeta = np.cos(np.deg2rad(beta))
                         cosgama = np.cos(np.deg2rad(gama))
-
-
+                        # print(Lattice_Type) 
+                        # print(sinalpha,sinbeta,singama,cosalpha,cosbeta,cosgama) 
                         #------------------------- Cubic ( SC, BCC, FCC ) Lattice ------------------------------------------------------------------------------------------------
-                        if ( Lattice_Type in ["Cubic", "cubic", "CUBIC" "c", "C", "B", "b", "BCC", "bcc", "FCC", "fcc", "F", "f", "SC", "sc"]):
+                        if ( Lattice_Type in ["Cubic", "cubic", "CUBIC" "c", "C", "B", "b", "BCC", "bcc", "FCC", "fcc", "F", "f", "SC", "sc","P"]):
                                     nume = a
                                     denu = np.sqrt(  (h**2)   + (k**2) +(l**2) )
                                     dhkl = (nume/denu)
                                     #print "this is cubic test"
+                                    # print(dhkl)
                                     return (1/dhkl)
 
                         #------------------- Tetragonal crystal structure ------------------------------------------------------------------------------------------------------------
@@ -106,4 +108,19 @@ class Do_Calculate_Crystal_Volume_and_dhkl:
 
 
 
-#--------------------------------------------------------------- Done ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------- Done -----------------------------------------
+
+Struct_Information =  Load_Structure.Extract_Structure_Info().Extract_Info('FeGe.struct')
+Material_Name_From_File = Struct_Information[0]
+Lattice_Type_From_File = Struct_Information[1]
+Inequivalent_Atom_From_File = int(Struct_Information[2])
+Lattice_Parameter = Struct_Information[3]
+Multiplicity_List_From_File = Struct_Information[4]
+Atom_Name_List = Struct_Information[5]
+Atom_Z_LIST = Struct_Information[6]
+X_Coordinate_List = Struct_Information[7]
+Y_Coordinate_List = Struct_Information[8]
+Z_Coordinate_List = Struct_Information[9]
+
+class_Do_Calculate_Crystal_Volume_and_dhkl = Do_Calculate_Crystal_Volume_and_dhkl()
+print(class_Do_Calculate_Crystal_Volume_and_dhkl.Calculate_Dhkl(Lattice_Type_From_File,4,4,4,Lattice_Parameter[0],Lattice_Parameter[1],Lattice_Parameter[2],Lattice_Parameter[3],Lattice_Parameter[4],Lattice_Parameter[5]))
