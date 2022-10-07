@@ -240,7 +240,6 @@ class Do_G_Optimization():
                         self.No_thickness = self.no_thickness.GetValue()
 
 
-
             #------------- Create the New Frame Template for the input ---------------------------------------------------------------------------
 
                         size_x = Main_Frame.Create_Main_Dialog().Window_Size_X
@@ -373,7 +372,7 @@ class Do_G_Optimization():
                         self.Final_Main_box = wx.BoxSizer(wx.VERTICAL)
                         #------- counter to fille the coordinatein in the textctrl --
                         coordinate_counter = 0
-                        #------ For every atom puttin gthe atomic cordinate and spin orientation -----------------
+                        #------ For every atom putting the atomic cordinate and spin orientation -----------------
                         for ineqiv_atom_index in range(self.inequiv_atoms):
 
                                     atom_box = wx.BoxSizer(wx.VERTICAL)
