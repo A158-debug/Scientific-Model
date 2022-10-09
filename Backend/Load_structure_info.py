@@ -10,8 +10,10 @@ import os
 class Extract_Structure_Info:
             def __init__(self):
                         self.My_Source_Folder = os.getcwd()
+                        
 
             def Extract_Info(self, Structure_File_Path):
+                        print(self.My_Source_Folder)
                         Structure_File_Name = os.path.basename(Structure_File_Path)
                         File_Extension = (Structure_File_Name.split("."))[1]
 
@@ -37,6 +39,7 @@ class Extract_Structure_Info:
                         #----------- Getting the Material Name ----------------------------------------------------------------------------
                                     Material_Name = (WIEN2K_Struct_File.readline()).split(" ")[0]
                                     wien2k_struct_file_info = WIEN2K_Struct_File.read()
+                                    print(wien2k_struct_file_info)
                                     #Readlines_data = WIEN2K_Struct_File.readlines()
 
                         #---------- Getting the Lattice type ------------------------------------------------------------------------------------------
@@ -132,4 +135,4 @@ class Extract_Structure_Info:
 
 
 class_Extract_Structure_Info = Extract_Structure_Info()
-class_Extract_Structure_Info.Extract_Info('FeGe.struct')
+class_Extract_Structure_Info.Extract_Info('./Backend/FeGe.struct')
