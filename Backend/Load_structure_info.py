@@ -39,7 +39,8 @@ class Extract_Structure_Info:
                         #----------- Getting the Material Name ----------------------------------------------------------------------------
                                     Material_Name = (WIEN2K_Struct_File.readline()).split(" ")[0]
                                     wien2k_struct_file_info = WIEN2K_Struct_File.read()
-                                    print(type(wien2k_struct_file_info))
+                                    # print(type(wien2k_struct_file_info))
+                                    # print(wien2k_struct_file_info)
                                     
                                     #Readlines_data = WIEN2K_Struct_File.readlines()
 
