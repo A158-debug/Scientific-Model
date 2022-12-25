@@ -9,18 +9,15 @@ const Form = () => {
     reader.readAsText(file);
     reader.onload = (event) => {
       let filedata = event.target.result;
-      // console.log(filedata);
+      //console.log(filedata);
       setfileData(filedata);
     };
-    // e.target.value = null;
   };
   return (
-    <div>
-      <form className="flex items-center space-x-6 mt-5 ml-5">
+    <div className="">
+      <form className="flex justify-center items-center space-x-6 mt-5 ml-5">
         <label className="block">
-          <input
-            type="file"
-            className="block w-full text-sm text-slate-500
+          <input type="file" className="block w-full text-sm text-slate-500
          file:mr-4 file:py-2 file:px-4
          file:rounded-full file:border-0
          file:text-sm file:font-semibold

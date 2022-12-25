@@ -116,7 +116,7 @@ class Do_G_Optimization2():
                                         else:
                                                 self.g_magnitude =  VDHKL.Do_Calculate_Crystal_Volume_and_dhkl().Calculate_Dhkl( self.Lattice_Type, h_index, k_index, l_index, self.anm, self.bnm, self.cnm, self.angle_alpha, self.angle_beta, self.angle_gama)
                                         
-                                                #----------- Setting the counter and Variable. Variabl are being Rest for next (hkl) values -----------------------   
+                           #----------- Setting the counter and Variable. Variabl are being Rest for next (hkl) values -----------------------   
                                         counter_coordinate = 0          
                                         self.FSCATT =0
                                         self.VG = 0
@@ -245,11 +245,11 @@ class Do_G_Optimization2():
                 max_ext = float(self.MAX_PSF_Relation[:, 4])/1e-9
 
         #---------- Printing the maximum values as the information dialog -----------------------------------------------------------------------------------------------------
-                print("h_max : ", h_max)
-                print("k_max : ", k_max)
-                print("l_max : ", l_max)
-                print("max_psf : ", max_psf)
-                print("max_ext : ", max_ext)
+                # print("h_max : ", h_max)
+                # print("k_max : ", k_max)
+                # print("l_max : ", l_max)
+                # print("max_psf : ", max_psf)
+                # print("max_ext : ", max_ext)
                 
 #--------------------------------------------------------------------------------------------- END -------------------------------------------
 class_Do_G_Optimization2 = Do_G_Optimization2()

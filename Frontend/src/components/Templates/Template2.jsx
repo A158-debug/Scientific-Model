@@ -6,162 +6,69 @@ import { Link } from "react-router-dom";
 
 const Template2 = () => {
   const { Gdata } = useContext(stateContext);
-  // "Mult_List": "['4', '4']",
-  // "X_Coordinate_List": ['0.13500000', '0.63500000', '0.86500000', '0.36500000', '0.84200000', '0.34200000', '0.15800000', '0.65800000'],
-  // "Y_Coordinate_List": ['0.13500000', '0.36500000', '0.63500000', '0.86500000', '0.84200000', '0.65800000', '0.34200000', '0.15800000'],
-  // "Z_Coordinate_List": ['0.13500000', '0.86500000', '0.36500000', '0.63500000', '0.84200000', '0.15800000', '0.65800000', '0.34200000']
-  const coordinates = ()=>{
-    for(let i=0;i<Gdata.Mult_List.length;i++){
-      let atom=[]
-        for(let j=0;j<parseInt(Gdata.Mult_List[i]); j++){
-              atom.push(parseInt(Gdata.X_Coordinate_List[i]))
-              atom.push(parseInt(Gdata.Y_Coordinate_List[i]))
-              atom.push(parseInt(Gdata.Z_Coordinate_List[i]))
-        }
+
+  let Mult_List = ["4", "4"];
+  let X_Coordinate_List = ["0.13500000","0.63500000","0.86500000","0.36500000","0.84200000","0.34200000","0.15800000","0.65800000"];
+  let Y_Coordinate_List = ["0.13500000","0.36500000","0.63500000","0.86500000","0.84200000","0.65800000","0.34200000", "0.15800000"];
+  let Z_Coordinate_List = ["0.13500000","0.86500000","0.36500000","0.63500000","0.84200000","0.15800000","0.65800000","0.34200000"];
+  let Atom_Name_List = ["Fe", "Ge"];
+
+  let molecule = {};
+  let k = 0;
+  for (let i = 0; i < Mult_List.length; i++) {
+    let elements_atoms = [];
+    for (let j = 0; j < parseInt(Mult_List[i]); j++) {
+      let atom_position = {};
+      atom_position["X_coordinate"] = parseFloat(X_Coordinate_List[k]);
+      atom_position["Y_coordinate"] = parseFloat(Y_Coordinate_List[k]);
+      atom_position["Z_coordinate"] = parseFloat(Z_Coordinate_List[k]);
+      elements_atoms.push(atom_position);
+      k++;
     }
+    molecule[Atom_Name_List[i]] = elements_atoms
   }
+  // console.log(atoms_coordinates);
   return (
     <>
-      <div className="template1-background flex flex-col content-center ">
-        <div className="nav-bar p-5">
-          <div className="flex flex-row">
-            <div className="basis-1/2">
-              <img
-                src="https://assets.website-files.com/613e7a6e19fd8f65b8d29b8e/613fff34608e624b738e4035_logo.svg"
-                loading="lazy"
-                alt=""
-                className="cursor-pointer "
-                height="150px"
-                width="150px"
-              ></img>
-            </div>
-            <div className="basis-1/2 self-center flex flex-row">
-              <Link to="/" className="hover:bg-amber-200 p-2 rounded">
-                <p className="text-xl text-amber-900 font-semibold mx-3">
-                  Home
-                </p>
-              </Link>
-              <Link to="/" className="hover:bg-amber-200 p-2 rounded">
-                <p className="text-xl text-amber-900 font-semibold mx-3">
-                  About Us
-                </p>
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="div flex flex-row">
-          <div className="basis-4/12 flex flex-row justify-center content-center">
-            <img src={temp1svg} alt="" className="" />
-          </div>
-          </div>
-        {/* <div className="basis-8/12 justify-center content-center m-3 p-3">
-          <form action="" className="border p-3">
-            <div className="flex flex-col">
-              <div className="container">
-                <label className="block ">
-                  <span className="text-lg block font-normal text-slate-700 ml-3">
-                    Fe &nbsp; :
-                  </span>
-                  <div classname="flex flex-row my-1">
-                    <div className="ml-2 my-2">
-                      <FormInput name="x" type="text" />
+      <div className="flex flex-col justify-center content-center">
+        <div className="justify-center content-center glass-background2">
+          <form action="">
+          <div className="flex flex-col">
+              <div className="">
+              {
+                Object.keys(molecule).map((atom_name)=> (
+                  <div className="flex flex-row flex-wrap ">
+                   <div className="mt-5">
+                    <p className="text-2xl font-semibold">{atom_name}</p>
+                    {molecule[atom_name].map((e)=>
+                    <div className=" flex flex-row flex-wrap mt-3 gap-3">
+                      <div className=" flex flex-row gap-3 content-center">
+                        <p className="text-lg text-black-400 basis-3/12">X : </p>
+                        <div className="w-full md:w-9/12"><input name="Material thickness :" defaultValue={e.X_coordinate} className="border rounded-md  px-2 py-1 w-10/12"/></div>     
+                      </div> 
+                      <div className=" flex flex-row gap-3 content-center">
+                        <p className="text-lg text-black-400 basis-3/12">Y :</p>
+                        <div className="w-full md:w-9/12"><input name="Material thickness :" defaultValue={e.Y_coordinate} className="border rounded-md  px-2 py-1 w-10/12"/></div>     
+                      </div> 
+                      <div className=" flex flex-row gap-3 content-center">
+                        <p className="text-lg text-black-400 basis-3/12">Z :</p>
+                        <div className="w-full md:w-9/12"><input name="Material thickness :" defaultValue={e.Z_coordinate} className="border rounded-md  px-2 py-1 w-10/12"/></div>     
+                      </div> 
                     </div>
-                    <div className="ml-2">
-                      <FormInput name="y" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="z" type="text" />
-                    </div>
+                    )}
+                   </div>
                   </div>
-                  <div className="flex flex-row my-1">
-                    <div className="ml-2">
-                      <FormInput name="x" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="y" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="z" type="text" />
-                    </div>
-                  </div>
-                  <div className="flex flex-row my-1">
-                    <div className="ml-2">
-                      <FormInput name="x" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="y" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="z" type="text" />
-                    </div>
-                  </div>
-                  <div className="flex flex-row my-1">
-                    <div className="ml-2">
-                      <FormInput name="x" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="y" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="z" type="text" />
-                    </div>
-                  </div>
-                </label>
-                <label className="block ">
-                  <span classname="text-lg block font-normal text-slate-700 ml-3">
-                    Ge &nbsp; :
-                  </span>
-                  <div className="flex flex-row my-1">
-                    <div className="ml-2">
-                      <FormInput name="x" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="y" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="z" type="text" />
-                    </div>
-                  </div>
-                  <div className="flex flex-row my-1">
-                    <div className="ml-2">
-                      <FormInput name="x" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="y" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="z" type="text" />
-                    </div>
-                  </div>
-                  <div className="flex flex-row my-1">
-                    <div className="ml-2">
-                      <FormInput name="x" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="y" type="text" />
-                    </div>
-                    <div className="ml-2">
-                      <FormInput name="z" type="text" />
-                    </div>
-                  </div>
-                </label>
-              </div>
-
-              <div classname="flex flex-row justify-between mt-3">
-                <div classname="">
-                  <button classname="rounded bg-red-400 text-white p-2 w-20">
-                    Exit
-                  </button>
-                </div>
-                <div classname="">
-                  <button classname="rounded bg-blue-400 text-white p-2 w-20">
-                    Next
-                  </button>
-                </div>
+                ))
+              }
+              {/*----------- Buttons --------   */}
+             <div className="flex flex-row justify-between mt-5 w-1/2">
+                <div className=""><button className="rounded bg-red-500 text-white p-2 w-20 hover:shadow-lg">Exit</button></div>
+                <div className=""><button className="rounded bg-blue-500 text-white p-2 w-20 hover:shadow-lg">Next</button></div>
               </div>
             </div>
+          </div>
           </form>
-        </div> */}
+        </div>
       </div>
     </>
   );

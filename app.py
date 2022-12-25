@@ -12,11 +12,7 @@ def Hello():
 
 @app.route("/file-data",methods=['POST'])
 def pie_equipment():
-    
     FileData = request.get_json()
-    # print(FileData)
-    # print(FileData['body'])
-    # print(type(FileData['body']))
     return {'output': {
     "Material_Name": "FeGe",
     "Lattice_Type": "P",

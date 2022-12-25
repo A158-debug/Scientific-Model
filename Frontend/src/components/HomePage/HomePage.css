@@ -1,18 +1,12 @@
-.paragraph-large {
-  font-size: 20px;
-  line-height: 176%;
-  opacity: 1;
-  transform-style: preserve-3d;
-  color: #616d7e;
-  text-align: center;
-}
 
-.heading-homePage {
-  /* color: #fff; */
-  font-size: 82px;
+.homePageContent{
+  height: 80vh;
+}
+.homePageHeading {
   line-height: 103%;
   text-align: center;
 }
+
 .get-started-button {
   transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg)
     rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
