@@ -123,4 +123,4 @@ Y_Coordinate_List = Struct_Information[8]
 Z_Coordinate_List = Struct_Information[9]
 
 class_Do_Calculate_Crystal_Volume_and_dhkl = Do_Calculate_Crystal_Volume_and_dhkl()
-print(class_Do_Calculate_Crystal_Volume_and_dhkl.Calculate_Dhkl(Lattice_Type_From_File,4,4,4,Lattice_Parameter[0],Lattice_Parameter[1],Lattice_Parameter[2],Lattice_Parameter[3],Lattice_Parameter[4],Lattice_Parameter[5]))
+# print(class_Do_Calculate_Crystal_Volume_and_dhkl.Calculate_Dhkl(Lattice_Type_From_File,4,4,4,Lattice_Parameter[0],Lattice_Parameter[1],Lattice_Parameter[2],Lattice_Parameter[3],Lattice_Parameter[4],Lattice_Parameter[5]))

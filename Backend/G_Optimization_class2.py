@@ -19,6 +19,8 @@ rc('text', usetex=True)
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------
+All_G_points_parameter = []
+
 class Do_G_Optimization2():
     
         def __init__(self):
@@ -105,12 +107,16 @@ class Do_G_Optimization2():
                 self.Extinction_distance_list = []
                 self.EMCD_Optimized_Paramter_list = []
                 self.ch = (0 + 0j)
+                # self.All_G_points_parameter=[]
+                # self.G_points_parameter={}
                 
             #---------- Starting to calculate the various parameter for every G(hkl) vector ---------------------------------------------------------------------------------------
  
                 for h_index in range( self.h, -(self.h+1), -1):
+                       
                         for k_index in range( self.k, -(self.k +1), -1):
                                 for l_index in range(self.l,  -(self.l +1), -1):
+                                        G_points_parameter={}
                                         if (h_index == 0 and k_index ==0 and l_index ==0 ):
                                                 continue
                                         else:
@@ -165,7 +171,8 @@ class Do_G_Optimization2():
                                         self.VG_Imaginary_Part = self.VG.imag
                                         #----------if(self.VG_Imaginary_Part==0):
                                         #----------print("VG_Real_Part : ", self.VG_Real_Part)
-                                        self.VG_Phase = math.atan(self.VG_Imaginary_Part/self.VG_Real_Part)
+                                        if(self.VG_Real_Part !=0):
+                                             self.VG_Phase = math.atan(self.VG_Imaginary_Part/self.VG_Real_Part)
                                         #----------print h_index, k_index, l_index, self.VG, self.Vg_Prefactor
 
                                         #****************************** <<  Magnetic Partial Structure Factor >> **********************************
@@ -222,6 +229,22 @@ class Do_G_Optimization2():
                                         self.phase_list.append(self.VG_Phase)
                                         self.Extinction_distance_list.append(self.Extinction_distance/1e-9)              #---- Extinction distance in nano-meter
                                         self.EMCD_Optimized_Paramter_list.append( self.emcd_optimized_parameter )
+                                        # self.G_points_parameter['h']=h_index
+                                        # self.G_points_parameter['k']=k_index
+                                        # self.G_points_parameter['l']=l_
+                                        # self.G_points_parameter['Vg']=np.abs(self.VG)
+                                        # self.G_points_parameter['Phase']=self.VG_Phase
+                                        # self.G_points_parameter['Extinction_distance (nm)']=self.Extinction_distance/1e-9
+                                        # self.All_G_points_parameter.append(self.G_points_parameter)
+                                        G_points_parameter['h']=h_index
+                                        G_points_parameter['k']=k_index
+                                        G_points_parameter['l']=l_index
+                                        G_points_parameter['Vg']=np.abs(self.VG)
+                                        G_points_parameter['Phase']=self.VG_Phase
+                                        G_points_parameter['Extinction_distance (nm)']=self.Extinction_distance/1e-9
+                                        All_G_points_parameter.append(G_points_parameter)
+                                        
+                                        # print(self.G_points_parameter)
                                         #ap.AppendText("\t %s \t %s \t %s \t  %s \t %s, \t  %s, \t  %s \n" % (h_index, k_index, l_index, self.VG, self.VG_Phase, self.PSF, self.Extinction_distance/1e-9))
 
             #-------- ------------Printing the Final obtained Highest PSF and corrosponding (hkl) and the Extinction distance ----------------------------------
@@ -254,5 +277,8 @@ class Do_G_Optimization2():
 #--------------------------------------------------------------------------------------------- END -------------------------------------------
 class_Do_G_Optimization2 = Do_G_Optimization2()
 class_Do_G_Optimization2.ON_DO_CALCULATE_G_OPTIMIZATION()
+# print(len(class_Do_G_Optimization2.All_G_points_parameter))
+# print(class_Do_G_Optimization2.All_G_points_parameter)
+# print(All_G_points_parameter)
 
 

@@ -1,12 +1,15 @@
 from flask import Flask, request
 from flask_cors import CORS
 import json
-
+from  G_Optimization_class2 import All_G_points_parameter
+# print(len(All_G_points_parameter))
 app = Flask(__name__)
 CORS(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def Hello():
+    print(len(All_G_points_parameter))
+    return {'output':All_G_points_parameter}
     return "Welcome to ElectronNova Server"
 
 
