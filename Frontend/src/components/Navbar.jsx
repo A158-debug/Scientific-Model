@@ -12,10 +12,10 @@ const Navbar = () => {
           </div>
           <div className="basis-8/12 self-center flex flex-row">
             <Link to="/" className="p-2 rounded">
-              <p className="text-xl text-sky-800 hover:text-sky-400  font-semibold mx-3">Home</p>
+              <p className="text-xl hover:text-sky-400  font-semibold mx-3">Home</p>
             </Link>
             <Link to="/" className="p-2 rounded">
-              <p className="text-xl text-sky-800 hover:text-sky-400  font-semibold mx-3">About Us</p>
+              <p className="text-xl hover:text-sky-400  font-semibold mx-3">About Us</p>
             </Link>
           </div>
       </div>
