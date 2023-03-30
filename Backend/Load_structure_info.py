@@ -13,7 +13,7 @@ class Extract_Structure_Info:
                         
 
             def Extract_Info(self, Structure_File_Path):
-                        print(self.My_Source_Folder)
+                        # print(self.My_Source_Folder)
                         Structure_File_Name = os.path.basename(Structure_File_Path)
                         File_Extension = (Structure_File_Name.split("."))[1]
 
@@ -118,15 +118,15 @@ class Extract_Structure_Info:
 
                         #---------- Return the output to the G optimization code ----------------------------------------------------------------------------------------
                         # print("Material_Name : ",Material_Name)
-                        # print("Lattice_Type : ",Lattice_Type)
-                        # print("Inequivalent Atoms : ",Inequivalent_Atoms)
-                        # print("Mult_List : ",Mult_List)
-                        # print("Atom_Name_List : ",Atom_Name_List)
+                        # print("\nLattice_Type : ",Lattice_Type)
+                        # print("\nInequivalent Atoms : ",Inequivalent_Atoms)
+                        # print("\nMult_List : ",Mult_List)
+                        # print("\nAtom_Name_List : ",Atom_Name_List)
                         # print("Atom_Z_List : ",Atom_Z_List)
-                        # print("Lattice_Parameter : ", Lattice_Parameter_Angle_List)
-                        # print("X_Coordinate_List : ",X_Coordinate_List)
-                        # print("Y_Coordinate_List : ",Y_Coordinate_List)
-                        # print("Z_Coordinate_List : ",Z_Coordinate_List)
+                        # print("\nLattice_Parameter : ", Lattice_Parameter_Angle_List)
+                        # print("\nX_Coordinate_List : ",X_Coordinate_List)
+                        # print("\nY_Coordinate_List : ",Y_Coordinate_List)
+                        # print("\nZ_Coordinate_List : ",Z_Coordinate_List)
 
                         
                         return (Material_Name, Lattice_Type, Inequivalent_Atoms, Lattice_Parameter_Angle_List, Mult_List, Atom_Name_List, Atom_Z_List, X_Coordinate_List, Y_Coordinate_List,Z_Coordinate_List)
@@ -136,5 +136,6 @@ class Extract_Structure_Info:
                         #------------- Close the opened WIEN2K file -----------------------------------------------------------------------------------------------------------
 
 
-class_Extract_Structure_Info = Extract_Structure_Info()
-class_Extract_Structure_Info.Extract_Info('./FeGe.struct')
+# class_Extract_Structure_Info = Extract_Structure_Info()
+# class_Extract_Structure_Info.Extract_Info('./FeGe.struct')
+# class_Extract_Structure_Info.Extract_Info('./BaFe12O19.struct')

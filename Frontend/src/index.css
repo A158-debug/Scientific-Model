@@ -1,31 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
-.homePage img{
-    -webkit-filter: invert(100%);
-    filter: invert(100%);
+.parent_app {
+  background-image: url("./images/purple_bg.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  min-height: 100vh;
+  color: #fff;
 }
 
-.parent_app{
-    background-image: url('./components/images/home1.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    height:100vh;
-    width: 100%;
+.get-started-button {
+  transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg)
+    rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+  opacity: 1;
+  transform-style: preserve-3d;
+  padding: 10px 25px;
+  border-radius: 15px;
+  background-color: #3183ff;
+  background-image: linear-gradient(150deg, transparent, #0751bf);
+  color: #fff;
+  font-size: 18px;
+  line-height: 140%;
+  text-align: center;
 }
-
-.glass-background{
-    width:80%;
-    margin: 0 auto;
-}   
-.glass-background2{
-    width:90%;
-    margin: 0 auto;
-}   
-
-
+.get-started-button:hover{
+    background-color: #3183ffdb;
+    background-image: linear-gradient(150deg, transparent, #0751bf);  
+}
