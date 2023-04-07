@@ -52,24 +52,24 @@ const Template1 = () => {
                 <p className="text-lg block mt-3">Lattice Parameters &nbsp; :</p>
                   <div className="flex flex-col md:flex-row mt-3 gap-3">
                     <div className="basis-1/3">
-                      <div className=""><input name="Material thickness :" value={Gdata.Lattice_Parameter[0]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
+                      <div className=""><input name="Material thickness :" defaultValue={Gdata.Lattice_Parameter[0]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
                     </div>
                     <div className="basis-1/3">
-                      <div className=""><input name="Material thickness :" value={Gdata.Lattice_Parameter[1]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
+                      <div className=""><input name="Material thickness :" defaultValue={Gdata.Lattice_Parameter[1]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
                     </div>
                     <div className="basis-1/3">
-                      <div className=""><input name="Material thickness :" value={Gdata.Lattice_Parameter[2]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
+                      <div className=""><input name="Material thickness :" defaultValue={Gdata.Lattice_Parameter[2]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
                     </div>
                   </div>
                   <div className="flex flex-col md:flex-row mt-3 gap-3">
                     <div className="basis-1/3">
-                      <div className=""><input name="Material thickness :" value={Gdata.Lattice_Parameter[3]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
+                      <div className=""><input name="Material thickness :" defaultValue={Gdata.Lattice_Parameter[3]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
                     </div>
                     <div className="basis-1/3">
-                      <div className=""><input name="Material thickness :" value={Gdata.Lattice_Parameter[4]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
+                      <div className=""><input name="Material thickness :" defaultValue={Gdata.Lattice_Parameter[4]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
                     </div>
                     <div className="basis-1/3">
-                      <div className=""><input name="Material thickness :" value={Gdata.Lattice_Parameter[5]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
+                      <div className=""><input name="Material thickness :" defaultValue={Gdata.Lattice_Parameter[5]} className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
                     </div>
                   </div>
               </div>

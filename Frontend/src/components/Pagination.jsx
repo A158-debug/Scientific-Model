@@ -10,7 +10,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     <nav>
     <ul className='pagination'>
       {pageNumbers.map(number => (
-        <li key={number} className='page-item' onClick={() => paginate(number)}>
+        <li key={number}  onClick={() => paginate(number)}>
             {number}
         </li>
       ))}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Table from "../components/Table";
 import ReactPaginate from "react-paginate";
+import Charts from "../charts/Charts";
 
 const Template3 = () => {
   const postsPerPage = 7;
@@ -97,7 +98,13 @@ const Template3 = () => {
           breakLabel="..."
           pageRangeDisplayed={3}
           renderOnZeroPageCount={null}
+          pageClassName={"px-4 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"}
+          previousClassName={"px-4 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"}
+          nextClassName={"px-4 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"}
+          className={"inline-flex -space-x-px my-5 self-center"}
+          activeLinkClassName={"bg-red-700 text-white px-4 py-2"}
         />
+        <Charts/>
       </div>
     </>
   );
