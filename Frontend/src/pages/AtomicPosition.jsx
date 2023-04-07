@@ -34,12 +34,12 @@ const Template2 = () => {
       <div className="flex flex-col justify-center content-center">
         <form className="flex justify-center ">
           <div className="flex flex-col w-4/5 p-3">
-              {Object.keys(molecule).map((atom_name) => (
-                <div className="flex flex-row flex-wrap">
+              {Object.keys(molecule).map((atom_name,idx) => (
+                <div className="flex flex-row flex-wrap"key={idx}>
                   <div className="mt-5">
                     <p className="text-2xl font-semibold">{atom_name}</p>
-                    {molecule[atom_name].map((e) => (
-                      <div className="flex flex-row flex-wrap mt-3 gap-3 border py-4 px-3 border-violet-300 rounded-sm">
+                    {molecule[atom_name].map((e,idx) => (
+                      <div className="flex flex-row flex-wrap mt-3 gap-3 border py-4 px-3 border-violet-300 rounded-sm" key={idx}>
                         <div className=" flex flex-row gap-3 content-center">
                           <p className="text-lg text-black-400 basis-3/12">
                             X :{" "}

@@ -39,7 +39,7 @@ const Table = ({ currentGdata }) => {
                 {table_row.map((row_values, index) => (
                   <th
                     scope="row"
-                    className="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white font-semibold text-[15px]"
+                    className="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white font-normal text-[15px]"
                     key={index}
                   >
                     {row_values}
