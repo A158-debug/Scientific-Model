@@ -6,18 +6,18 @@ const Template2 = () => {
   const { Gdata } = useContext(stateContext);
   const navigate = useNavigate();
 
-  let Mult_List = ["4", "4"];
-  let Atom_Name_List = ["Fe", "Ge"];
 
+  console.log(Gdata)
+  console.log(Gdata.Mult_list.length)
   const onHandleClickOptimumValues = ()=>{
     navigate('/optimumvalues')
   }
 
   let molecule = {};
   let k = 0;
-  for (let i = 0; i < Mult_List.length; i++) {
+  for (let i = 0; i < Gdata.Mult_list.length; i++) {
     let elements_atoms = [];
-    for (let j = 0; j < parseInt(Mult_List[i]); j++) {
+    for (let j = 0; j < Gdata.Mult_list[i]; j++) {
       let atom_position = {};
       atom_position["X_coordinate"] = parseFloat(Gdata.X_Coordinate_List[k]);
       atom_position["Y_coordinate"] = parseFloat(Gdata.Y_Coordinate_List[k]);
@@ -25,7 +25,7 @@ const Template2 = () => {
       elements_atoms.push(atom_position);
       k++;
     }
-    molecule[Atom_Name_List[i]] = elements_atoms;
+    molecule[Gdata.Atom_Name_List[i]] = elements_atoms;
   }
   // console.log(atoms_coordinates);
 

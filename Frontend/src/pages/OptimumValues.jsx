@@ -9,6 +9,7 @@ const Template3 = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [G_Optimized_data, setG_Optimized_data] = useState([]);
+  const [Output_Optimized_G_Parameters,setOutput_Optimized_G_Parameters] = useState([]);
 
   
   useEffect(() => {
@@ -16,7 +17,9 @@ const Template3 = () => {
       const G_Optimzed_Values = await axios.get(
         `http://127.0.0.1:5000/g_optimized_values`
         );
-        setG_Optimized_data(G_Optimzed_Values.data.Output_G_points_parameter);
+        console.log(G_Optimzed_Values?.data)
+        setG_Optimized_data(G_Optimzed_Values?.data?.Output_G_points_parameter);
+        setOutput_Optimized_G_Parameters(G_Optimzed_Values?.data?.Output_Optimized_G_Parameters);
         setLoading(false);
       })();
     }, []);
@@ -46,10 +49,10 @@ const Template3 = () => {
                 <h1 className="text-2xl font-semibold">
                   Optimized G-Value and Extinction Distance
                 </h1>
-                <div className="mt-5 text-lg text-black-400">
-                  <p className="mt-2">Optimum G(h,k,l) : (4,0,0)</p>
-                  <p className="mt-2">Max SF : 3.87</p>
-                  <p className="mt-2">Extinction Distance :143.69</p>
+                <div className="mt-5 text-lg text-black-400  px-10">
+                  <p className="mt-2">Optimum G(h,k,l) : ({Output_Optimized_G_Parameters[0]},{Output_Optimized_G_Parameters[1]},{Output_Optimized_G_Parameters[2]}) </p>
+                  <p className="mt-2">Max SF : {Output_Optimized_G_Parameters[3]?.toFixed(2)}</p>
+                  <p className="mt-2">Extinction Distance :{Output_Optimized_G_Parameters[4]?.toFixed(2)} </p>
                 </div>
               </div>
               <div className="md:basis-6/12 basis-12">

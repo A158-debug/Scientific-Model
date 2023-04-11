@@ -43,7 +43,7 @@ const Template1 = () => {
                 </div>
                 <div className="basis-1/2 mt-5 flex flex-col md:flex-row gap-3 content-center ">
                   <p className="text-lg text-black-400 basis-5/12">Accelerating voltage :</p>
-                  <div className="w-full md:w-7/12"><input name="Material thickness :"  onChange={(e)=>setOtherPara({...otherPara,accelerating_volt:e.target.value})} className="border rounded-md  px-2 py-1 w-10/12  text-black focus:outline-none  text-lg"/></div>       
+                  <div className="w-full md:w-7/12"><input name="Material thickness :"  onChange={(e)=>setOtherPara({...otherPara,accelerating_volt:e.target.value})} className="border rounded-md  px-2 py-1 w-10/12  text-black focus:outline-none  text-lg" placeholder="Enter voltage value"/></div>       
                 </div>      
               </div>
 
@@ -79,13 +79,13 @@ const Template1 = () => {
                 <p className="text-lg block mt-3">G Vector Range &nbsp; :</p>
                   <div className="flex flex-col md:flex-row mt-3 gap-3">
                     <div className="basis-1/3">
-                      <div className=""><input name="h_value" className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
+                      <div className=""><input name="h_value" className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg pl" placeholder="Enter h value"/></div>
                     </div>
                     <div className="basis-1/3">
-                      <div className=""><input name="k_value" className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg" /></div>
+                      <div className=""><input name="k_value" className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg" placeholder="Enter k value" /></div>
                     </div>
                     <div className="basis-1/3">
-                      <div className=""><input name="l_value" className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"/></div>
+                      <div className=""><input name="l_value" className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg" placeholder="Enter l value"/></div>
                     </div>
                   </div>    
               </div>
