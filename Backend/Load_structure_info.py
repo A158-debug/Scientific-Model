@@ -1,5 +1,5 @@
 #----------------------------This is a module file which extract the information from the input file ------------------------------------------------------------------------------------
-#----- ----------------------This is done from the Regular expression library of python ---------------------------------------------------------------------------------------------------------------------------
+#----- ----------------------This is done from the Regular expression library of python -------------------------------------------------------------------------------------------------
 #--------- ------------------WILL THIS WORK FOR THE FCC ATOMS, WHERE YOU HAVE ONLY ONE ATOMS IN THE THE CENTER 
 
 import re

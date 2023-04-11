@@ -8,6 +8,7 @@ import numpy as np
 import math, os
 # import Make_Main_Menu as Make_Menu
 import Load_structure_info as Load_Structure
+# import Load_structure_info_new as Load_Structure
 import matplotlib.pyplot as plt
 from matplotlib import rc
 import Tem_properties as TEM
@@ -54,7 +55,9 @@ class Do_G_Optimization():
                 self.accel_voltage = 300
                 self.Magnetic_Atom_List = [True,False]                               # Boolean value (True/False ) Obtained from the check box
                 self.material_thickness_nm= 5*1e-9 
+                
                 self.All_G_points_parameter = []
+                self.Result_G_points_parameter = []
         
 #*********************************************************************************************************************************************
 #---------------------------------------- Final Calculation binding function -----------------------------------------------------------------
@@ -259,8 +262,14 @@ class Do_G_Optimization():
                 # print("max_psf : ", max_psf)
                 # print("max_ext : ", max_ext)
                 
+                self.Result_G_points_parameter.append(h_max)
+                self.Result_G_points_parameter.append(k_max)
+                self.Result_G_points_parameter.append(l_max)
+                self.Result_G_points_parameter.append(max_psf)
+                self.Result_G_points_parameter.append(max_ext)
+                
                 # print(len(All_G_points_parameter))
-                return self.All_G_points_parameter
+                return self.All_G_points_parameter, self.Result_G_points_parameter
                 
                 
                 

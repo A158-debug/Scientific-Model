@@ -4,40 +4,66 @@ class Extract_Structure_Info:
     def __init__(self,string_a):
         self.string_a = string_a
 
-    def print_input_string(self):
+    def Print_Input_String(self):
         print(self.string_a)
 
-    def extract_info(self):
-        #----------material name ------------------------------------
-        # print(self.string_a)
+    def Extract_Info(self):
         line_split_list = self.string_a.split('\n')
-        print(line_split_list[0])
+        
+        #initializing a count to change lines while reading the struct file
         count = 0 
+        #getting material name
         material_name = line_split_list[0]
+        material_name = material_name.rstrip()
+        if '\r' in material_name:
+                material_name = material_name.replace('\r','')
         count += 1 
+        #getting lattice type
         lattice_type = line_split_list[count][0]
+        if '\r' in lattice_type:
+                lattice_type = lattice_type.replace('\r','')
+        
+        #finding number of non eq atoms
         find_index_noneq = line_split_list[count].rfind(':')
-        non_eq_atoms = line_split_list[count][find_index_noneq+3:]
+        non_eq_atoms = str(line_split_list[count][find_index_noneq+1:])
+        non_eq_atoms = non_eq_atoms.strip()
+        non_eq_atoms = float(non_eq_atoms)
+        
+    
+        non_eq_atoms = str(non_eq_atoms)
+        if '\r' in non_eq_atoms:
+                non_eq_atoms = non_eq_atoms.replace('\r','')
+        non_eq_atoms = float(non_eq_atoms)
         count+=1
-        # print(line_split_list[count])
+        
+        # getting calc and unit  
         match_calc = re.search("CALC",line_split_list[count])
-        # print(match_calc.start())
         match_unit = re.search("unit",line_split_list[count])
-        # print(match_unit.start())
+        
 
         
         mode_of_calculation = line_split_list[count][match_calc.end()+1:match_unit.start()]
         unit = line_split_list[count][match_unit.end()+1:]
         count +=1 
+
+        # finding lattice parameters
         lattice_parameters = line_split_list[count].split(" ")
         lattice_parameters_final = []
+        counting_variable = 0
         for ele in lattice_parameters: #removing empty spaces
             if ele.strip():
-                lattice_parameters_final.append(ele)
-        # ((float(Lattice_Parameter_Angle[0]) * 0.529177) / 10)
-        for xc in range(3):
-            lattice_parameters_final[xc] = str((float(lattice_parameters_final[xc])*0.529177)/10)
+                if '\r' in ele:
+                    ele = ele.replace('\r','')
+                #
+                if counting_variable < 3 :
+                    lattice_parameters_final.append((float(ele)*0.529177)/10)
+                else:
+                    lattice_parameters_final.append(float(ele))
+                counting_variable += 1 
+        
         count+=1 
+
+        #defining empty list 
         atom_name_list = []
         atom_z_list = []
         x_coordinate_list = []
@@ -48,6 +74,10 @@ class Extract_Structure_Info:
         npt_list = []
         r_list = []
         rmt_list = []
+
+
+        # running a nested for loop to find the values of the above parameters
+
         for i in range(int(non_eq_atoms)):
             x_start = line_split_list[count].rfind('X') +2 
             y_start = line_split_list[count].rfind('Y') 
@@ -55,16 +85,20 @@ class Extract_Structure_Info:
             x_cr = line_split_list[count][x_start:y_start]
             y_cr = line_split_list[count][y_start+2:z_start]
             z_cr = line_split_list[count][z_start+2:]
-            z_cr = z_cr.replace('\r','')
-            x_coordinate_list.append(x_cr)
-            y_coordinate_list.append(y_cr)
-            z_coordinate_list.append(z_cr)
+            
+            if '\r' in x_cr:
+                x_cr = x_cr.replace('\r','')
+            x_coordinate_list.append(float(x_cr))
+            if '\r' in y_cr:
+                y_cr = y_cr.replace('\r','')
+            y_coordinate_list.append(float(y_cr))
+            if '\r' in z_cr:
+                z_cr = z_cr.replace('\r','')
+            
+            z_coordinate_list.append(float(z_cr))
 
-            # print(x_cr)
-            # print(y_cr) 
-            # print(z_cr)
             count +=1 
-            # print(line_split_list[count])
+            
             match_mult = re.search("MULT",line_split_list[count])
             match_isplit = re.search("ISPLIT",line_split_list[count])
             mult = line_split_list[count][match_mult.end()+2:match_isplit.start()]
@@ -72,9 +106,6 @@ class Extract_Structure_Info:
             mult_list.append(mult)
             isplit= int(line_split_list[count][match_isplit.end()+2:])
             isplit_list.append(isplit)
-            # print(mult)
-            # print(isplit)
-            # print()
             for j in range(mult-1):
                 count += 1 
                 x_start = line_split_list[count].rfind('X') +2 
@@ -83,60 +114,54 @@ class Extract_Structure_Info:
                 x_cr = line_split_list[count][x_start:y_start]
                 y_cr = line_split_list[count][y_start+2:z_start]
                 z_cr = line_split_list[count][z_start+2:]
-                z_cr = z_cr.replace('\r','')
+                if '\r' in x_cr:
+                    x_cr = x_cr.replace('\r','')
+                x_coordinate_list.append(float(x_cr))
+                if '\r' in y_cr:
+                    y_cr = y_cr.replace('\r','')
+                y_coordinate_list.append(float(y_cr))
+                if '\r' in z_cr:
+                    z_cr = z_cr.replace('\r','')
                 
-                x_coordinate_list.append(x_cr)
-                y_coordinate_list.append(y_cr)
-                z_coordinate_list.append(z_cr)
-                # print(line_split_list[count])
-                # print()
+                z_coordinate_list.append(float(z_cr))
             
             count +=1 
-            # print(line_split_list[count])
             match_npt = re.search("NPT= ",line_split_list[count])
             match_ro = re.search("R",line_split_list[count])
             match_rmt = re.search("RMT= ",line_split_list[count])
-            # print(match_rmt.start())
-
             match_z = re.search("Z: ",line_split_list[count])
             
             atom_name = line_split_list[count][:match_npt.start()]
-            # atom_name_list.append(atom_name)
             npt = line_split_list[count][match_npt.end():match_ro.start()]
             ro = line_split_list[count][match_ro.end()+2:match_rmt.start()]
             rmt = line_split_list[count][match_rmt.end():match_z.start()]
             z = line_split_list[count][match_z.end():]
-            atom_name = atom_name.replace(" ","")
+            atom_name = atom_name.strip()
+            if '\r' in atom_name:
+                atom_name = atom_name.replace('\r','')
             atom_name_list.append(atom_name)
-            # print("atom name=" , atom_name)
-            # print("npt=" ,npt)
             npt_list.append(npt)
-            # print("r0=" ,ro)
             r_list.append(ro)
-            # print("rmt=",rmt)
             rmt_list.append(rmt)
-            # print("z:",z)
-            atom_z_list.append(z)
+            if '\r' in z:
+                z = z.replace('\r','')
+            atom_z_list.append(float(z))
             count += 4
             
-        print("material name:",material_name)   
-        print("lattice type:" ,lattice_type)
-        print("inequivalent atom:" ,non_eq_atoms)
-        print("Mult list:" ,mult_list)
-        print("atom name list:" , atom_name_list)
-        print("atom z list:" , atom_z_list)
-        print("lattice parameter :", lattice_parameters_final)
-        print('x_coordinate_list',x_coordinate_list)
-        print('y_coordinate_list:',y_coordinate_list)
-        print('z_coordinate_list',z_coordinate_list)
-        print()
+        # print("material name:",material_name)   
+        # print("lattice type:" ,lattice_type)
+        # print("inequivalent atom:" ,non_eq_atoms)
+        # print("Mult list:" ,mult_list)
+        # print("atom name list:" , atom_name_list)
+        # print("atom z list:" , atom_z_list)
+        # print("lattice parameter :", lattice_parameters_final)
+        # print('x_coordinate_list',x_coordinate_list)
+        # print('y_coordinate_list:',y_coordinate_list)
+        # print('z_coordinate_list',z_coordinate_list)
         
-        return(material_name,lattice_type,non_eq_atoms,lattice_parameters,mult_list,atom_name_list,atom_z_list,x_coordinate_list,y_coordinate_list,z_coordinate_list)
+        structFileInfo = {'Material_Name': material_name , 'Lattice_Type' : lattice_type ,'Inequivalent_Atoms': non_eq_atoms,'Mult_list': mult_list,'Atom_Name_List':atom_name_list,'Atom_Z_List':atom_z_list,'Lattice_Parameter':lattice_parameters_final,'X_Coordinate_List' : x_coordinate_list, 'Y_Coordinate_List':y_coordinate_list,'Z_Coordinate_List' : z_coordinate_list }
 
-        #---------getting lattice type ------------------------------
-
-
-
-aloo = Extract_Structure_Info("FeGe                                                        \r\nP   LATTICE,NONEQUIV.ATOMS:  2                               \r\nMODE OF CALC=RELA unit=ang \r\n  8.881716  8.881716  8.881716  90.000000 90.000000 90.000000\r\nATOM  -1:X=0.13500000 Y=0.13500000 Z=0.13500000\r\n          MULT= 4          ISPLIT= 8\r\nATOM  -1:X=0.63500000 Y=0.36500000 Z=0.86500000\r\nATOM  -1:X=0.86500000 Y=0.63500000 Z=0.36500000\r\nATOM  -1:X=0.36500000 Y=0.86500000 Z=0.63500000\r\nFe         NPT=  781  R0=0.00005000 RMT= 2.30        Z: 26.0\r\nLOCAL ROT MATRIX:    1.0000000 0.0000000 0.0000000\r\n                     0.0000000 1.0000000 0.0000000\r\n                     0.0000000 0.0000000 1.0000000\r\nATOM   2: X=0.84200000 Y=0.84200000 Z=0.84200000\r\n          MULT= 4          ISPLIT= 8\r\nATOM   2:X=0.34200000 Y=0.65800000 Z=0.15800000\r\nATOM   2:X=0.15800000 Y=0.34200000 Z=0.65800000\r\nATOM   2:X=0.65800000 Y=0.15800000 Z=0.34200000\r\nGe         NPT=  781  R0=0.00005000 RMT= 2.18        Z: 32.0\r\nLOCAL ROT MATRIX:    0.0000000 0.0000000 0.0000000\r\n                     0.0000000 0.0000000 0.0000000\r\n                     0.0000000 0.0000000 0.0000000\r\n   0      NUMBER OF SYMMETRY OPERATIONS\r\n")
-aloo.extract_info()
+        Structure_info_dict = {'output':structFileInfo}
+        return Structure_info_dict
+        
 
