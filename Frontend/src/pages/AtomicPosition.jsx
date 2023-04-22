@@ -6,9 +6,6 @@ const Template2 = () => {
   const { Gdata } = useContext(stateContext);
   const navigate = useNavigate();
 
-
-  console.log(Gdata)
-  console.log(Gdata.Mult_list.length)
   const onHandleClickOptimumValues = ()=>{
     navigate('/optimumvalues')
   }
@@ -81,7 +78,7 @@ const Template2 = () => {
                   </div>
                 </div>
               ))}
-
+ 
               {/*----------- Buttons --------   */}
               <div className="flex flex-row justify-center gap-x-5 mt-10">
                 <div className="">

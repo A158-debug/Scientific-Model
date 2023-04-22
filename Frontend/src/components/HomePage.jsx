@@ -24,7 +24,6 @@ const HomePage2 = () => {
       requestOptions
     );
     if (response) {
-      // console.log(response?.data?.output)
       setGdata(response?.data?.output);
       navigate("/fileinfo");
     } else alert("Something went wrong");
