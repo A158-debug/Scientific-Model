@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
+import { stateContext } from "../context/ContextProvider";
 import axios from "axios";
 import Table from "../components/Table";
 import ReactPaginate from "react-paginate";
@@ -8,16 +9,27 @@ const Template3 = () => {
   const postsPerPage = 7;
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [thickness, setThickness] = useState(null)
+  const [gPoints, setGPoints] = useState(null)
+
+
   const [G_Optimized_data, setG_Optimized_data] = useState([]);
   const [Output_Optimized_G_Parameters,setOutput_Optimized_G_Parameters] = useState([]);
+
+
+  const { magneticAtoms } = useContext(stateContext);
 
   
   useEffect(() => {
     (async () => {
-      const G_Optimzed_Values = await axios.get(
-        `http://127.0.0.1:5000/g_optimized_values`
-        );
-        console.log(G_Optimzed_Values?.data)
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        magnetic_atom_dict: JSON.stringify({ magneticAtoms }),
+      };
+
+      const G_Optimzed_Values = await axios.post(
+        `http://127.0.0.1:5000/g_optimized_values`,requestOptions);
         setG_Optimized_data(G_Optimzed_Values?.data?.Output_G_points_parameter);
         setOutput_Optimized_G_Parameters(G_Optimzed_Values?.data?.Output_Optimized_G_Parameters);
         setLoading(false);
@@ -66,6 +78,8 @@ const Template3 = () => {
                       name="Material thickness :"
                       className="border rounded-md  px-2 py-1 w-10/12"
                       placeholder="(nm)"
+                      value={thickness}
+                      onChange={(e)=>console.log(e.target.value)}
                     />
                   </div>
                 </div>
@@ -77,6 +91,8 @@ const Template3 = () => {
                     <input
                       name="Material thickness :"
                       className="border rounded-md  px-2 py-1 w-10/12"
+                      value ={gPoints}
+                      onChange={(e)=>console.log(e.target.value)}
                     />
                   </div>
                 </div>

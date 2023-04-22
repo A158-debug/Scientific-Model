@@ -14,7 +14,6 @@ CORS(app)
 def App():
     return "Welcome to Server"
 
-
 @app.route("/file_data",methods=['POST'])
 def File_Read_Function():
     FileInput = request.get_json()   # parse the incomming json request
@@ -25,13 +24,20 @@ def File_Read_Function():
     extracted_info_data = class_Extract_Structure_Info.Extract_Info()
 
     return extracted_info_data
+
     
 @app.route("/g_optimized_values",methods=['GET','POST'])
 def G_Optimization_output_function():
-    G_Optimization_class = Do_G_Optimization()
+    Magentic_Atoms_response = request.get_json() 
+    Magnetic_Atoms = json.loads(Magentic_Atoms_response['magnetic_atom_dict'])
+    
+    extracted_data_with_magnetic_atoms = {};
+    extracted_data_with_magnetic_atoms['magnetic_atoms'] = Magnetic_Atoms['magneticAtoms']
+    extracted_data_with_magnetic_atoms['extracted_data'] = extracted_info_data['output']
+
+    G_Optimization_class = Do_G_Optimization(extracted_data_with_magnetic_atoms)
     Output_G_points_parameter, Output_Optimized_G_Parameters= G_Optimization_class.ON_DO_CALCULATE_G_OPTIMIZATION()
-    # global extracted_info_data
-    print(extracted_info_data)
+    
     return {"Output_G_points_parameter": Output_G_points_parameter,"Output_Optimized_G_Parameters":Output_Optimized_G_Parameters} 
   
 
