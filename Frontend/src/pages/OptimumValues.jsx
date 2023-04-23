@@ -9,17 +9,17 @@ const Template3 = () => {
   const postsPerPage = 7;
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [thickness, setThickness] = useState(null)
-  const [gPoints, setGPoints] = useState(null)
+  const [thickness, setThickness] = useState("")
+  const [gPoints, setGPoints] = useState("")
 
 
   const [G_Optimized_data, setG_Optimized_data] = useState([]);
   const [Output_Optimized_G_Parameters,setOutput_Optimized_G_Parameters] = useState([]);
+  const [ChartData,SetChartData] = useState({thicknessData:[], SF_ThicknessFunction:[]});
 
 
-  const { magneticAtoms } = useContext(stateContext);
+  const { magneticAtoms,Gdata } = useContext(stateContext);
 
-  
   useEffect(() => {
     (async () => {
       const requestOptions = {
@@ -34,6 +34,7 @@ const Template3 = () => {
         setOutput_Optimized_G_Parameters(G_Optimzed_Values?.data?.Output_Optimized_G_Parameters);
         setLoading(false);
       })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
   const pageCount = Math.ceil(G_Optimized_data.length / postsPerPage);
@@ -48,7 +49,18 @@ const Template3 = () => {
 
   const handleOnClickGraph = async (e) => {
     e.preventDefault();
-    // Output format [[h, k, l, Vg(Volt), Phase, Extinction_distance].....] ,multiple array
+    const cnm = Gdata?.Lattice_Parameter[2]
+    // const cnm = 2
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      thickness_and_gpoints: JSON.stringify({cnm, thickness,gPoints,G_Optimized_data,}),
+    };
+    const G_Data_Chart_Values = await axios.post(`http://127.0.0.1:5000/thickness_gpoints_values`,requestOptions);
+    if(G_Data_Chart_Values){
+      SetChartData({thicknessData:G_Data_Chart_Values?.data?.final_2d_list_x,SF_ThicknessFunction:G_Data_Chart_Values?.data?.final_2d_list_y
+      })
+    }
   };
 
   return (
@@ -76,10 +88,10 @@ const Template3 = () => {
                   <div className="w-full md:w-6/12">
                     <input
                       name="Material thickness :"
-                      className="border rounded-md  px-2 py-1 w-10/12"
+                      className="border rounded-md  px-2 py-1 w-10/12 text-black focus:outline-none"
                       placeholder="(nm)"
                       value={thickness}
-                      onChange={(e)=>console.log(e.target.value)}
+                      onChange={(e)=>setThickness(e.target.value)}
                     />
                   </div>
                 </div>
@@ -90,9 +102,9 @@ const Template3 = () => {
                   <div className="w-full md:w-6/12">
                     <input
                       name="Material thickness :"
-                      className="border rounded-md  px-2 py-1 w-10/12"
+                      className="border rounded-md  px-2 py-1 w-10/12 text-black focus:outline-none"
                       value ={gPoints}
-                      onChange={(e)=>console.log(e.target.value)}
+                      onChange={(e)=>setGPoints(e.target.value)}
                     />
                   </div>
                 </div>
@@ -123,7 +135,7 @@ const Template3 = () => {
           className={"inline-flex -space-x-px my-5 self-center"}
           activeLinkClassName={"bg-red-700 text-white px-4 py-2"}
         />
-        <Charts/>
+        <Charts ChartData={ChartData}/>
       </div>
     </>
   );

@@ -228,7 +228,7 @@ class Do_G_Optimization():
                         self.Lattice_type = str( self.lattice_choice_combo_box.GetValue() )
                         self.anm = float(self.lattice_a.GetValue())*1e-9                   #------ Lattice parameter are in nanometer
                         self.bnm = float(self.lattice_b.GetValue())*1e-9                   #----- Lattice parameter are in nanometer
-                        self.cnm = float(self.lattice_c.GetValue())*1e-9                        # --- Lattice parameter are in nanometer
+                        self.cnm = float(self.lattice_c.GetValue())*1e-9                   # --- Lattice parameter are in nanometer
                         self.angle_alpha = float(self.alpha_ctrl.GetValue())             #-- angles are in degree
                         self.angle_beta = float(self.beta_ctrl.GetValue())
                         self.angle_gama = float(self.gama_ctrl.GetValue())

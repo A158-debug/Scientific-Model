@@ -1,7 +1,6 @@
-import React,{useEffect,useState} from "react";
+import React from "react";
 import {Line} from "react-chartjs-2";
-import faker from "faker";
-import axios from "axios";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,7 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
+} from 'chart.js';
 
 ChartJS.register(
   CategoryScale,
@@ -37,37 +36,39 @@ export const options = {
   },
 };
 
+const Charts = ({ChartData}) => {
 
+    const labels = ChartData?.thicknessData[0];
+    let datasets=[]
+  
+    ChartData?.SF_ThicknessFunction.forEach(myFunction);
 
-const Charts = () => {
-  const [structureFactor, setStructureFactor] = useState([]);
+    // const setBg = () => {
+    //   const randomColor = Math.floor(Math.random()*16777215).toString(16);
+    //   return  "#" + randomColor;
+    // }
 
-  useEffect(() => {
-    (async () => {
-      const G_Optimzed_Values = await axios.get(
-        `http://127.0.0.1:5000/g_optimized_values`
-        );
-        const G_Optimized_data = G_Optimzed_Values.data.Output_G_points_parameter;
-        const GdataStructureFactor = G_Optimized_data.map((points)=> {return points[5]}).slice(0,100)
-        setStructureFactor(GdataStructureFactor)
-      })();
-    }, []);
-    const labels = [0,20,40,60,80,100];
+    function myFunction(item){
+      var randomColor = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+
+      datasets.push({label:"Labels",data:item,backgroundColor:randomColor})
+    }
+    console.log(datasets)
     const data = {
       labels,
-      datasets: [
-        {
-          label: 'A dataset',
-          data: structureFactor,
-          backgroundColor: 'rgba(255, 99, 132, 1)',
-        },
-      ],
+      // datasets: [
+      //   {
+      //     label: 'A dataset',
+      //     data: ChartData?.SF_ThicknessFunction[0],
+      //     backgroundColor: 'rgba(255, 99, 132, 1)',
+      //   },
+      // ],
+      datasets:datasets
     };
 
   return (
     <>
       <div className="border mt-10 bg-white m-10">
-        {/* <Scatter options={options} data={data} />; */}
         <Line options={options} data={data} />;
       </div>
     </>
