@@ -1,22 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { stateContext } from "../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
 
 const Template1 = () => {
-  const { Gdata, magneticAtoms, setmagneticAtoms } = useContext(stateContext);
+  const { Gdata, magneticAtoms, setmagneticAtoms, otherPara, setOtherPara } =
+    useContext(stateContext);
   const navigate = useNavigate();
-
-  const [otherPara, setOtherPara] = useState({
-    Material_Thickness: "",
-    accelerating_volt: "",
-    alpha_Para: "",
-    beta_Para: "",
-    gamma_Para: "",
-  });
 
   const handleOnTemplate2 = async () => {
     navigate("/atomicposition");
-
   };
 
   const handleOnSelectMagneticAtoms = (e) => {
@@ -79,8 +71,30 @@ const Template1 = () => {
                         accelerating_volt: e.target.value,
                       })
                     }
+                    value={otherPara.accelerating_volt}
                     className="border rounded-md  px-2 py-1 w-10/12  text-black focus:outline-none  text-lg"
                     placeholder="Enter voltage value"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/*----------- Title & Lattice --------   */}
+            <div className="flex flex-col md:flex-row">
+              <div className="basis-1/2 mt-5 flex flex-col md:flex-row gap-3 content-center ">
+                <p className="text-lg text-black-400 basis-5/12">Thickness :</p>
+                <div className="w-full md:w-7/12">
+                  <input
+                    name="Material thickness :"
+                    className="border rounded-md  px-2 py-1 w-10/12  text-black focus:outline-none  text-lg"
+                    value={otherPara.Material_Thickness}
+                    placeholder="thickness in (nm)"
+                      onChange={(e) =>
+                        setOtherPara({
+                          ...otherPara,
+                          Material_Thickness: e.target.value,
+                        })
+                      }
                   />
                 </div>
               </div>
@@ -93,7 +107,7 @@ const Template1 = () => {
                 <div className="basis-1/3">
                   <div className="">
                     <input
-                      name="Material thickness :"
+                      name=" :"
                       defaultValue={Gdata.Lattice_Parameter[0]}
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
                     />
@@ -102,7 +116,7 @@ const Template1 = () => {
                 <div className="basis-1/3">
                   <div className="">
                     <input
-                      name="Material thickness :"
+                      name=" :"
                       defaultValue={Gdata.Lattice_Parameter[1]}
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
                     />
@@ -111,7 +125,7 @@ const Template1 = () => {
                 <div className="basis-1/3">
                   <div className="">
                     <input
-                      name="Material thickness :"
+                      name=" :"
                       defaultValue={Gdata.Lattice_Parameter[2]}
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
                     />
@@ -122,7 +136,7 @@ const Template1 = () => {
                 <div className="basis-1/3">
                   <div className="">
                     <input
-                      name="Material thickness :"
+                      name=" :"
                       defaultValue={Gdata.Lattice_Parameter[3]}
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
                     />
@@ -131,7 +145,7 @@ const Template1 = () => {
                 <div className="basis-1/3">
                   <div className="">
                     <input
-                      name="Material thickness :"
+                      name=""
                       defaultValue={Gdata.Lattice_Parameter[4]}
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
                     />
@@ -140,7 +154,7 @@ const Template1 = () => {
                 <div className="basis-1/3">
                   <div className="">
                     <input
-                      name="Material thickness :"
+                      name=""
                       defaultValue={Gdata.Lattice_Parameter[5]}
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
                     />
@@ -159,6 +173,13 @@ const Template1 = () => {
                       name="h_value"
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg pl"
                       placeholder="Enter h value"
+                      value={otherPara.h_para}
+                      onChange={(e) =>
+                        setOtherPara({
+                          ...otherPara,
+                          h_para: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -168,6 +189,13 @@ const Template1 = () => {
                       name="k_value"
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
                       placeholder="Enter k value"
+                      value={otherPara.k_para}
+                      onChange={(e) =>
+                        setOtherPara({
+                          ...otherPara,
+                          k_para: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -177,6 +205,13 @@ const Template1 = () => {
                       name="l_value"
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
                       placeholder="Enter l value"
+                      value={otherPara.l_para}
+                      onChange={(e) =>
+                        setOtherPara({
+                          ...otherPara,
+                          l_para: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>

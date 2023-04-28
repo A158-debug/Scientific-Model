@@ -39,17 +39,12 @@ def Plot_GPoints_graph(cnm,thickness_range,number_of_points_to_plot,list_contain
                  
                  optimized_function.append((((Optimized_Extinction_list[j]*1e-9)/ (np.pi*cnm)) *  ((np.sin(((np.pi*z*1e-9)/(Optimized_Extinction_list[j]*1e-9))))**2)*np.abs(Optimized_PSF_list[j]))) 
                  x_axis.append(z)
+                 
             final_2d_list_y.append(optimized_function)
-            # x_axis = [k for k in thickness_range]
             final_2d_list_x.append(x_axis)
         ChartData = {"final_2d_list_x":final_2d_list_x,"final_2d_list_y":final_2d_list_y}  
         return ChartData
 
 
-cnm= 2
-nu = 6
-thickness = 100
 
-# x1,y1= Plot_GPoints_graph(cnm,thickness,nu,li)
-# plt.scatter(x1,y1, marker= '.')
-# plt.show()
+

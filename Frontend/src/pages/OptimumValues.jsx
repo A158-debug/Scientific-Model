@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { stateContext } from "../context/ContextProvider";
 import axios from "axios";
 import Table from "../components/Table";
@@ -9,34 +9,39 @@ const Template3 = () => {
   const postsPerPage = 7;
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [thickness, setThickness] = useState("")
-  const [gPoints, setGPoints] = useState("")
-
+  const [thickness, setThickness] = useState("");
+  const [gPoints, setGPoints] = useState("");
 
   const [G_Optimized_data, setG_Optimized_data] = useState([]);
-  const [Output_Optimized_G_Parameters,setOutput_Optimized_G_Parameters] = useState([]);
-  const [ChartData,SetChartData] = useState({thicknessData:[], SF_ThicknessFunction:[]});
+  const [Output_Optimized_G_Parameters, setOutput_Optimized_G_Parameters] =
+    useState([]);
+  const [ChartData, SetChartData] = useState({
+    thicknessData: [],
+    SF_ThicknessFunction: [],
+  });
 
-
-  const { magneticAtoms,Gdata } = useContext(stateContext);
+  const { magneticAtoms, Gdata, otherPara } = useContext(stateContext);
 
   useEffect(() => {
     (async () => {
       const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        magnetic_atom_dict: JSON.stringify({ magneticAtoms }),
+        magnetic_atom_dict: JSON.stringify({ magneticAtoms, otherPara }),
       };
 
       const G_Optimzed_Values = await axios.post(
-        `http://127.0.0.1:5000/g_optimized_values`,requestOptions);
-        setG_Optimized_data(G_Optimzed_Values?.data?.Output_G_points_parameter);
-        setOutput_Optimized_G_Parameters(G_Optimzed_Values?.data?.Output_Optimized_G_Parameters);
-        setLoading(false);
-      })();
+        `http://127.0.0.1:5000/g_optimized_values`,
+        requestOptions
+      );
+      setG_Optimized_data(G_Optimzed_Values?.data?.Output_G_points_parameter);
+      setOutput_Optimized_G_Parameters(
+        G_Optimzed_Values?.data?.Output_Optimized_G_Parameters
+      );
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    
+  }, []);
+
   const pageCount = Math.ceil(G_Optimized_data.length / postsPerPage);
   const paginate = (pageNumber) => {
     const newOffset =
@@ -44,22 +49,34 @@ const Template3 = () => {
     setCurrentPage(newOffset);
   };
 
-  const currentGdata = G_Optimized_data.slice( currentPage, currentPage + postsPerPage
+  const currentGdata = G_Optimized_data.slice(
+    currentPage,
+    currentPage + postsPerPage
   );
 
   const handleOnClickGraph = async (e) => {
     e.preventDefault();
-    const cnm = Gdata?.Lattice_Parameter[2]
-    // const cnm = 2
+    const cnm = Gdata?.Lattice_Parameter[2];
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      thickness_and_gpoints: JSON.stringify({cnm, thickness,gPoints,G_Optimized_data,}),
+      thickness_and_gpoints: JSON.stringify({
+        cnm,
+        thickness,
+        gPoints,
+        G_Optimized_data,
+      }),
     };
-    const G_Data_Chart_Values = await axios.post(`http://127.0.0.1:5000/thickness_gpoints_values`,requestOptions);
-    if(G_Data_Chart_Values){
-      SetChartData({thicknessData:G_Data_Chart_Values?.data?.final_2d_list_x,SF_ThicknessFunction:G_Data_Chart_Values?.data?.final_2d_list_y
-      })
+    const G_Data_Chart_Values = await axios.post(
+      `http://127.0.0.1:5000/thickness_gpoints_values`,
+      requestOptions
+    );
+    if (G_Data_Chart_Values) {
+      SetChartData({
+        thicknessData: G_Data_Chart_Values?.data?.final_2d_list_x,
+        SF_ThicknessFunction: G_Data_Chart_Values?.data?.final_2d_list_y,
+      });
+      setLoading(true);
     }
   };
 
@@ -74,9 +91,18 @@ const Template3 = () => {
                   Optimized G-Value and Extinction Distance
                 </h1>
                 <div className="mt-5 text-lg text-black-400  px-10">
-                  <p className="mt-2">Optimum G(h,k,l) : ({Output_Optimized_G_Parameters[0]},{Output_Optimized_G_Parameters[1]},{Output_Optimized_G_Parameters[2]}) </p>
-                  <p className="mt-2">Max SF : {Output_Optimized_G_Parameters[3]?.toFixed(2)}</p>
-                  <p className="mt-2">Extinction Distance :{Output_Optimized_G_Parameters[4]?.toFixed(2)} </p>
+                  <p className="mt-2">
+                    Optimum G(h,k,l) : ({Output_Optimized_G_Parameters[0]},
+                    {Output_Optimized_G_Parameters[1]},
+                    {Output_Optimized_G_Parameters[2]}){" "}
+                  </p>
+                  <p className="mt-2">
+                    Max SF : {Output_Optimized_G_Parameters[3]?.toFixed(2)}
+                  </p>
+                  <p className="mt-2">
+                    Extinction Distance :
+                    {Output_Optimized_G_Parameters[4]?.toFixed(2)}{" "}
+                  </p>
                 </div>
               </div>
               <div className="md:basis-6/12 basis-12">
@@ -91,7 +117,7 @@ const Template3 = () => {
                       className="border rounded-md  px-2 py-1 w-10/12 text-black focus:outline-none"
                       placeholder="(nm)"
                       value={thickness}
-                      onChange={(e)=>setThickness(e.target.value)}
+                      onChange={(e) => setThickness(e.target.value)}
                     />
                   </div>
                 </div>
@@ -103,8 +129,8 @@ const Template3 = () => {
                     <input
                       name="Material thickness :"
                       className="border rounded-md  px-2 py-1 w-10/12 text-black focus:outline-none"
-                      value ={gPoints}
-                      onChange={(e)=>setGPoints(e.target.value)}
+                      value={gPoints}
+                      onChange={(e) => setGPoints(e.target.value)}
                     />
                   </div>
                 </div>
@@ -120,6 +146,10 @@ const Template3 = () => {
             </div>
           </form>
         </div>
+        {
+          loading &&  <Charts ChartData={ChartData} />
+        }
+       
         <Table currentGdata={currentGdata} loading={loading} />
         <ReactPaginate
           previousLabel={"< previous"}
@@ -129,13 +159,18 @@ const Template3 = () => {
           breakLabel="..."
           pageRangeDisplayed={3}
           renderOnZeroPageCount={null}
-          pageClassName={"px-4 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"}
-          previousClassName={"px-4 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"}
-          nextClassName={"px-4 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"}
+          pageClassName={
+            "px-4 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          }
+          previousClassName={
+            "px-4 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          }
+          nextClassName={
+            "px-4 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          }
           className={"inline-flex -space-x-px my-5 self-center"}
           activeLinkClassName={"bg-red-700 text-white px-4 py-2"}
         />
-        <Charts ChartData={ChartData}/>
       </div>
     </>
   );

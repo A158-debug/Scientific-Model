@@ -36,6 +36,8 @@ def G_Optimization_output_function():
     extracted_data_with_magnetic_atoms = {};
     extracted_data_with_magnetic_atoms['magnetic_atoms'] = Magnetic_Atoms['magneticAtoms']
     extracted_data_with_magnetic_atoms['extracted_data'] = extracted_info_data['output']
+    extracted_data_with_magnetic_atoms['other_parameters'] = Magnetic_Atoms['otherPara']
+
 
     G_Optimization_class = Do_G_Optimization(extracted_data_with_magnetic_atoms)
     Output_G_points_parameter, Output_Optimized_G_Parameters= G_Optimization_class.ON_DO_CALCULATE_G_OPTIMIZATION()

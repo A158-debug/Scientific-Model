@@ -8,9 +8,9 @@ const HomePage2 = () => {
   const navigate = useNavigate();
   const { setGdata, fileData } = useContext(stateContext);
 
+
   const handleOnClick = async (e) => {
     e.preventDefault();
-    // console.log(fileData);
     if (!fileData) {
       return alert("Please select a file");
     }
@@ -33,7 +33,7 @@ const HomePage2 = () => {
       <div className="flex flex-col text-center p-5 mt-10">
         <div className="flex flex-col justify-center content-center">
           <h1 className="text-5xl font-semibold md:text-8xl md:p-0 md:font-semibold">
-            Welcome To Our Website
+          EMCD Calculation
           </h1>
           <p className="text-xl p-3">
             In this website you can predict optimal Bragg spot G for

@@ -14,7 +14,7 @@ const App = () => {
       <BrowserRouter>
       <Navbar/>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" forceRefresh={true} element={<HomePage />} />
           <Route path="/fileinfo" element={<FileInfo />} />
           <Route path="/atomicPosition" element={<AtomicPosition />} />
           <Route path="/optimumvalues" element={<OptimumValues />} />
