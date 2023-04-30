@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext,useRef } from "react";
 import { stateContext } from "../context/ContextProvider";
 import axios from "axios";
 import Table from "../components/Table";
 import ReactPaginate from "react-paginate";
 import Charts from "../charts/Charts";
+import { useNavigate } from "react-router-dom";
 
 const Template3 = () => {
   const postsPerPage = 7;
   const [loading, setLoading] = useState(false);
+  const [chartLoading, setChartLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [thickness, setThickness] = useState("");
   const [gPoints, setGPoints] = useState("");
@@ -18,6 +20,7 @@ const Template3 = () => {
   const [ChartData, SetChartData] = useState({
     thicknessData: [],
     SF_ThicknessFunction: [],
+    final_hkl_list:[]
   });
 
   const { magneticAtoms, Gdata, otherPara } = useContext(stateContext);
@@ -72,14 +75,27 @@ const Template3 = () => {
       requestOptions
     );
     if (G_Data_Chart_Values) {
+
+      setChartLoading(true)
       SetChartData({
         thicknessData: G_Data_Chart_Values?.data?.final_2d_list_x,
         SF_ThicknessFunction: G_Data_Chart_Values?.data?.final_2d_list_y,
+        final_hkl_list: G_Data_Chart_Values?.data?.final_parameter_list,
+
       });
       setLoading(true);
     }
   };
-
+  const navigate = useNavigate()
+  const ChartRef = useRef(null)
+  const handleOnChartDownload = async(e)=>{
+      e.preventDefault()
+      const link = document.createElement('a');
+      link.download = "chart.png";
+      link.href = ChartRef.current.toBase64Image();
+      link.click()
+      navigate('/')
+  }
   return (
     <>
       <div className="flex flex-col justify-center content-center pb-10">
@@ -141,15 +157,22 @@ const Template3 = () => {
                   >
                     Show Plot
                   </button>
+                 {
+                  chartLoading && (<button
+                    className="rounded bg-blue-500 text-white p-2 px-5 hover:shadow-lg ml-5"
+                    onClick={handleOnChartDownload}
+                  >
+                    Download Plot
+                  </button>)
+                 }
                 </div>
               </div>
             </div>
           </form>
         </div>
         {
-          loading &&  <Charts ChartData={ChartData} />
+          loading &&  <Charts ChartData={ChartData} ChartRef={ChartRef} />
         }
-       
         <Table currentGdata={currentGdata} loading={loading} />
         <ReactPaginate
           previousLabel={"< previous"}

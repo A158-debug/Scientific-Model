@@ -28,6 +28,7 @@ def Plot_GPoints_graph(cnm,thickness_range,number_of_points_to_plot,list_contain
 
         final_2d_list_x = []
         final_2d_list_y = []
+        final_parameter_list = [] # 2d list , h , k , l , PSF , Extinction_distance
         for j in range(number_of_points_to_plot):
             #y axis is optimized function 
             #x axis is thickness range
@@ -37,12 +38,21 @@ def Plot_GPoints_graph(cnm,thickness_range,number_of_points_to_plot,list_contain
             # print(Optimized_Extinction_list[j])
             for z in range(thickness_range):
                  
+                 
                  optimized_function.append((((Optimized_Extinction_list[j]*1e-9)/ (np.pi*cnm)) *  ((np.sin(((np.pi*z*1e-9)/(Optimized_Extinction_list[j]*1e-9))))**2)*np.abs(Optimized_PSF_list[j]))) 
                  x_axis.append(z)
                  
+            parameter_list = []     
+            parameter_list.append(Optimized_h_list[j])
+            parameter_list.append(Optimized_k_list[j])
+            parameter_list.append(Optimized_l_list[j])
+            parameter_list.append(Optimized_PSF_list[j])
+            parameter_list.append(Optimized_Extinction_list[j])
+            final_parameter_list.append(parameter_list)    
             final_2d_list_y.append(optimized_function)
             final_2d_list_x.append(x_axis)
-        ChartData = {"final_2d_list_x":final_2d_list_x,"final_2d_list_y":final_2d_list_y}  
+        # print(final_parameter_list)
+        ChartData = {"final_2d_list_x":final_2d_list_x,"final_2d_list_y":final_2d_list_y,"final_parameter_list":final_parameter_list}  
         return ChartData
 
 

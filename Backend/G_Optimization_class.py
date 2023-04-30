@@ -56,8 +56,8 @@ class Do_G_Optimization():
                 self.angle_beta = self.Lattice_Parameter[4]                          # --- Lattice parameter are in degree
                 self.angle_gama = self.Lattice_Parameter[5]                          # --- Lattice parameter are in degree
                 
-                
                 self.accel_voltage =  int(self.otherParameters["accelerating_volt"] )                         
+         
                 self.material_thickness_nm= int(self.otherParameters["Material_Thickness"] )*1e-9 
                 
                 self.All_G_points_parameter = []              # --- For storing all G parameters ----
