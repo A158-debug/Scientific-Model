@@ -7,7 +7,7 @@ import numpy as np
 # import EMCD_GUI_beta as Main_Frame
 import math, os
 # import Make_Main_Menu as Make_Menu
-import Load_structure_info as Load_Structure
+# import Load_structure_info as Load_Structure
 # import Load_structure_info_new as Load_Structure
 import matplotlib.pyplot as plt
 from matplotlib import rc
