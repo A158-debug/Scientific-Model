@@ -14,9 +14,6 @@ const Navbar = () => {
             <Link to="/" className="p-2 rounded">
               <p className="text-xl hover:text-sky-400  font-semibold mx-3">Home</p>
             </Link>
-            <Link to="/" className="p-2 rounded">
-              <p className="text-xl hover:text-sky-400  font-semibold mx-3">About Us</p>
-            </Link>
           </div>
       </div>
     </>

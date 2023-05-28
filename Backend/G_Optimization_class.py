@@ -7,7 +7,7 @@ import numpy as np
 # import EMCD_GUI_beta as Main_Frame
 import math, os
 # import Make_Main_Menu as Make_Menu
-import Load_structure_info as Load_Structure
+# import Load_structure_info as Load_Structure
 # import Load_structure_info_new as Load_Structure
 import matplotlib.pyplot as plt
 from matplotlib import rc
@@ -30,23 +30,11 @@ class Do_G_Optimization():
  
                 self.Struct_Information = extracted_data_with_magnetic_atoms['extracted_data']  #----> dictonary
                 self.checked_magetic_atoms = extracted_data_with_magnetic_atoms['magnetic_atoms']
-                # print(self.Struct_Information)
+                self.otherParameters = extracted_data_with_magnetic_atoms['other_parameters']
                 #---------------- Load the structure file ---------------------------------------------------------------------------------------------------
                 self.Author_Name = "DEVENDRA SINGH NEGI"
                        
                 #---------------- Getting the information from the input file --------------------------------------------------------------------------------
-                # self.Struct_Information =  Load_Structure.Extract_Structure_Info().Extract_Info('FeGe.struct')
-                # self.Material_Name_From_File = self.Struct_Information[0]
-                # self.Lattice_Type = self.Struct_Information[1]
-                # self.inequiv_atoms = int(self.Struct_Information[2])
-                # self.Lattice_Parameter = self.Struct_Information[3]
-                # self.Atom_Multiplicty_List = self.Struct_Information[4]
-                # self.Atom_Name_List = self.Struct_Information[5]
-                # self.Atom_Z_LIST = self.Struct_Information[6]
-                # self.X_Coordinate_List = self.Struct_Information[7]
-                # self.Y_Coordinate_List = self.Struct_Information[8]
-                # self.Z_Coordinate_List = self.Struct_Information[9]
-                
                 self.Material_Name_From_File = self.Struct_Information['Material_Name']
                 self.Lattice_Type = self.Struct_Information['Lattice_Type']
                 self.inequiv_atoms = int(self.Struct_Information['Inequivalent_Atoms'])
@@ -59,17 +47,6 @@ class Do_G_Optimization():
                 self.Z_Coordinate_List = self.Struct_Information['Z_Coordinate_List']
                 
                 
-                # print(type(self.Material_Name_From_File))    # string
-                # print(type(self.Lattice_Type))               # string    
-                # print(type(self.inequiv_atoms))              # int
-                # print(self.Lattice_Parameter)
-                # print(self.Atom_Multiplicty_List)
-                # print(self.Atom_Name_List)
-                # print(self.Atom_Z_LIST)
-                # print(self.X_Coordinate_List)
-                # print(self.Y_Coordinate_List)
-                # print(self.Z_Coordinate_List)
-                
                 #------ Lattice parameter are in nanometer
                 self.anm = float(self.Lattice_Parameter[0])*1e-9                    #----- Lattice parameter are in nanometer
                 self.bnm = float(self.Lattice_Parameter[1])*1e-9                    #----- Lattice parameter are in nanometer
@@ -79,9 +56,9 @@ class Do_G_Optimization():
                 self.angle_beta = self.Lattice_Parameter[4]                          # --- Lattice parameter are in degree
                 self.angle_gama = self.Lattice_Parameter[5]                          # --- Lattice parameter are in degree
                 
-                
-                self.accel_voltage = 300                             
-                self.material_thickness_nm= 5*1e-9 
+                self.accel_voltage =  int(self.otherParameters["accelerating_volt"] )                         
+         
+                self.material_thickness_nm= int(self.otherParameters["Material_Thickness"] )*1e-9 
                 
                 self.All_G_points_parameter = []              # --- For storing all G parameters ----
                 self.Result_G_points_parameter = []           # --- For storing optimized G Paramters ----
@@ -93,13 +70,8 @@ class Do_G_Optimization():
                 for magetic_atoms in  self.checked_magetic_atoms:
                         self.All_Atom_List[magetic_atoms] = True  
                         
-                self.Magnetic_Atom_List = [magnetic_atoms for magnetic_atoms in self.All_Atom_List.values()]  
-                # Boolean value (True/False ) Obtained from the check box 
-                # print(self.Magnetic_Atom_List)       
-                        
-                 
+                self.Magnetic_Atom_List = [magnetic_atoms for magnetic_atoms in self.All_Atom_List.values()]    
                
-                
                 
         
 #*********************************************************************************************************************************************
@@ -123,8 +95,6 @@ class Do_G_Optimization():
                 self.atom_position_dict = {}
                          
             #************ Getting spin alignment of every atoms -------------------------------------------------------------------------------------------------------------------------
-
-                # Spin_check_list = [True, False, True, False, True, False, True, False]
                 Spin_check_list = []
                 for i in range(len(self.Magnetic_Atom_List)):
                         if(self.Magnetic_Atom_List[i]==True):
@@ -146,10 +116,10 @@ class Do_G_Optimization():
                 
             #-------------------------------------------------------------------------------------------------------------------------------------------------------------
             #---------------- Calculating the Vg, Excitation coefficient, Partial Structure Factor starts from here -------------------------------------------------------
-                self.h = 4
-                self.k = 4
-                self.l = 4
-                
+                self.h = int(self.otherParameters['h_para'])
+                self.k = int(self.otherParameters['k_para'])
+                self.l = int(self.otherParameters['l_para'])
+          
                 self.miller_indices_list = [] 
                 self.ch = (0 + 0j)
       
@@ -324,8 +294,6 @@ class Do_G_Optimization():
                 
                 
 #--------------------------------------------------------------------------------------------- END -------------------------------------------
-class_Do_G_Optimization2 = Do_G_Optimization({'magnetic_atoms': {'O1': True, 'Fe1': True, 'O2': True, 'O5': True, 'Ba1': True, 'Fe5': True}, 'extracted_data': {'Material_Name': 'BaFe12O19', 'Lattice_Type': 'H', 'Inequivalent_Atoms': 11.0, 'Mult_list': [12, 24, 12, 6, 4, 4, 4, 4, 4, 2, 2], 'Atom_Name_List': ['O1', 'Fe1', 'O2', 'O3', 'Fe2', 'Fe3', 'O4', 'O5', 'Fe4', 'Ba1', 'Fe5'], 'Atom_Z_List': [8.0, 26.0, 8.0, 8.0, 26.0, 26.0, 8.0, 8.0, 26.0, 56.0, 26.0], 'Lattice_Parameter': [0.5900000222852999, 0.5900000222852999, 2.3200000230528, 90.0, 90.0, 120.0], 'X_Coordinate_List': [0.15647, 0.84353, 0.84353, 0.15647, 0.31294, 0.68706, 0.68706, 0.31294, 0.84353, 0.15647, 0.15647, 0.84353, 0.16867, 0.83133, 0.83132, 0.16868, 0.33735, 0.66265, 0.66265, 0.33735, 0.16868, 0.83132, 0.83133, 0.16867, 0.83133, 0.16867, 0.16868, 0.83132, 0.66265, 0.33735, 0.33735, 0.66265, 0.83132, 0.16868, 0.16867, 0.83133, 0.5026, 0.4974, 0.4974, 0.5026, 0.0052, 0.9948, 0.9948, 0.0052, 0.4974, 0.5026, 0.5026, 0.4974, 0.18213, 0.81787, 0.81787, 0.18213, 0.36426, 0.63574, 0.33333333, 0.66666667, 0.66666666, 0.33333334, 0.33333333, 0.66666667, 0.66666666, 0.33333334, 0.33333333, 0.66666667, 0.66666666, 0.33333334, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.33333333, 0.66666667, 0.0, 0.0], 'Y_Coordinate_List': [0.31294, 0.68706, 0.15647, 0.84353, 0.15647, 0.84353, 0.84353, 0.15647, 0.68706, 0.31294, 0.84353, 0.15647, 0.33735, 0.66265, 0.16867, 0.83133, 0.16867, 0.83133, 0.83132, 0.16868, 0.33735, 0.66265, 0.66265, 0.33735, 0.16868, 0.83132, 0.83133, 0.16867, 0.83133, 0.16867, 0.16868, 0.83132, 0.66265, 0.33735, 0.83132, 0.16868, 0.0052, 0.9948, 0.5026, 0.4974, 0.5026, 0.4974, 0.4974, 0.5026, 0.9948, 0.0052, 0.4974, 0.5026, 0.36426, 0.63574, 0.18213, 0.81787, 0.18213, 0.81787, 0.66666667, 0.33333333, 0.33333333, 0.66666667, 0.66666667, 0.33333333, 0.33333333, 0.66666667, 0.66666667, 0.33333333, 0.33333333, 0.66666667, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.66666667, 0.33333333, 0.0, 0.0], 'Z_Coordinate_List': [0.05192, 0.94808, 0.55192, 0.44808, 0.55192, 0.44808, 0.05192, 0.94808, 0.55192, 0.44808, 0.05192, 0.94808, 0.60825, 0.39175, 0.10825, 0.89175, 0.10825, 0.89175, 0.60825, 0.39175, 0.60825, 0.39175, 0.10825, 0.89175, 0.10825, 0.89175, 0.60825, 0.39175, 0.60825, 0.39175, 0.10825, 0.89175, 0.10825, 0.89175, 0.60825, 0.39175, 0.14957, 0.85043, 0.64957, 0.35043, 0.64957, 0.35043, 0.14957, 0.85043, 0.64957, 0.35043, 0.14957, 0.85043, 0.25, 0.75, 0.75, 0.25, 0.75, 0.25, 0.02713, 0.97287, 0.52713, 0.47287, 0.1903, 0.8097, 0.6903, 0.3097, 0.55454, 0.44546, 0.05454, 0.94546, 0.15094, 0.84906, 0.65094, 0.34906, 0.24267, 0.75733, 0.74267, 0.25733, 0.75, 0.25, 0.0, 0.5]}})
-Output_G_points_parameter= class_Do_G_Optimization2.ON_DO_CALCULATE_G_OPTIMIZATION()
-# class_Do_G_Optimization2 = Do_G_Optimization()
+
 
 

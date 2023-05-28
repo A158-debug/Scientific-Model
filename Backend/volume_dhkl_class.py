@@ -2,7 +2,6 @@
 #
 from __future__ import division
 import numpy as np
-import Load_structure_info as Load_Structure
 
 class Do_Calculate_Crystal_Volume_and_dhkl:
 
@@ -110,17 +109,3 @@ class Do_Calculate_Crystal_Volume_and_dhkl:
 
 #--------------------------------- Done -----------------------------------------
 
-Struct_Information =  Load_Structure.Extract_Structure_Info().Extract_Info('FeGe.struct')
-Material_Name_From_File = Struct_Information[0]
-Lattice_Type_From_File = Struct_Information[1]
-Inequivalent_Atom_From_File = int(Struct_Information[2])
-Lattice_Parameter = Struct_Information[3]
-Multiplicity_List_From_File = Struct_Information[4]
-Atom_Name_List = Struct_Information[5]
-Atom_Z_LIST = Struct_Information[6]
-X_Coordinate_List = Struct_Information[7]
-Y_Coordinate_List = Struct_Information[8]
-Z_Coordinate_List = Struct_Information[9]
-
-class_Do_Calculate_Crystal_Volume_and_dhkl = Do_Calculate_Crystal_Volume_and_dhkl()
-# print(class_Do_Calculate_Crystal_Volume_and_dhkl.Calculate_Dhkl(Lattice_Type_From_File,4,4,4,Lattice_Parameter[0],Lattice_Parameter[1],Lattice_Parameter[2],Lattice_Parameter[3],Lattice_Parameter[4],Lattice_Parameter[5]))
