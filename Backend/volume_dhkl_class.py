@@ -1,5 +1,5 @@
 #-------------------------- This class has a function which calculates the volume of the given unit cell and interplaner distance
-#
+
 from __future__ import division
 import numpy as np
 
