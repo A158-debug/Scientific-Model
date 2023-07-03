@@ -10,16 +10,16 @@ const App = () => {
 
   return (
     <>
-    <section className="parent_app">
-      <BrowserRouter>
-      <Navbar/>
-        <Routes>
-          <Route path="/" forceRefresh={true} element={<HomePage />} />
-          <Route path="/fileinfo" element={<FileInfo />} />
-          <Route path="/atomicPosition" element={<AtomicPosition />} />
-          <Route path="/optimumvalues" element={<OptimumValues />} />
-        </Routes>
-      </BrowserRouter>
+      <section className="parent_app">
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/" forceRefresh={true} element={<HomePage />} />
+            <Route path="/fileinfo" element={<FileInfo />} />
+            <Route path="/atomicPosition" element={<AtomicPosition />} />
+            <Route path="/optimumvalues" element={<OptimumValues />} />
+          </Routes>
+        </BrowserRouter>
       </section>
     </>
   )

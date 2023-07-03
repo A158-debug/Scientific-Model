@@ -4,15 +4,35 @@
 @tailwind components;
 @tailwind utilities;
 
+.app__navbar {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
 
 .parent_app {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.parent_app::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-image: url("./images/atomic_bg.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  width: 100%;
-  min-height: 100vh;
-  color: #fff;
+  filter: brightness(50%); /* Adjust the brightness value (50% in this case) to control the darkness of the overlay */
+  z-index: -1;
 }
 
 .get-started-button {
@@ -29,7 +49,7 @@
   line-height: 140%;
   text-align: center;
 }
-.get-started-button:hover{
-    background-color: #3183ffdb;
-    background-image: linear-gradient(150deg, transparent, #0751bf);  
+.get-started-button:hover {
+  background-color: #3183ffdb;
+  background-image: linear-gradient(150deg, transparent, #0751bf);
 }

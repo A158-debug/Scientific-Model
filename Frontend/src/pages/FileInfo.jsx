@@ -1,15 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { stateContext } from "../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
 
 const Template1 = () => {
-  const { Gdata, magneticAtoms, setmagneticAtoms, otherPara, setOtherPara } = useContext(stateContext);
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false);
+  const { Gdata, magneticAtoms, setmagneticAtoms, otherPara, setOtherPara } =
+    useContext(stateContext);
 
   const handleOnTemplate2 = async () => {
-    if(otherPara.h_para==="" || otherPara.k_para==="" || otherPara.l_para===""){
-      alert("Please enter all required values");
-    }else navigate("/atomicposition");
+    if (
+      otherPara?.h_para === "" ||
+      otherPara?.k_para === "" ||
+      otherPara?.l_para === ""
+    ) {
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+      return;
+    } else navigate("/atomicposition");
   };
 
   const handleOnMainPage = async () => {
@@ -20,9 +30,29 @@ const Template1 = () => {
     setmagneticAtoms({ ...magneticAtoms, [e.target.name]: e.target.checked });
   };
 
+  const handleChangeAlert = () => {
+    setShowAlert(false);
+  };
+
   return (
     <>
       <div className="flex flex-col justify-center content-center">
+        {showAlert && (
+          <div className="my-4 p-4 bg-red-500 text-white rounded w-10/12 flex justify-between items-center mx-auto">
+            <span className="text-lg">Please Enter all the values</span>
+            <span className=" px-4 py-3" onClick={handleChangeAlert}>
+              <svg
+                className="fill-current h-6 w-6 text-white-primary"
+                role="button"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <title>Close</title>
+                <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+              </svg>
+            </span>
+          </div>
+        )}
         <div className="flex justify-center">
           <div className="flex flex-col p-3 w-4/5 ">
             {/*----------- Title & Lattice --------   */}
@@ -32,7 +62,7 @@ const Template1 = () => {
                 <div className="w-full md:w-7/12">
                   <input
                     name="Material thickness :"
-                    defaultValue={Gdata.Material_Name}
+                    defaultValue={Gdata?.Material_Name}
                     className="border rounded-md  px-2 py-1 w-10/12  text-black focus:outline-none  text-lg"
                   />
                 </div>
@@ -42,7 +72,7 @@ const Template1 = () => {
                 <div className="w-full md:w-7/12">
                   <input
                     name="Material thickness :"
-                    defaultValue={Gdata.Lattice_Type}
+                    defaultValue={Gdata?.Lattice_Type}
                     className="border rounded-md  px-2 py-1 w-10/12  text-black focus:outline-none  text-lg"
                   />
                 </div>
@@ -58,7 +88,7 @@ const Template1 = () => {
                 <div className="w-full md:w-7/12">
                   <input
                     name="Material thickness :"
-                    defaultValue={Gdata.Inequivalent_Atoms}
+                    defaultValue={Gdata?.Inequivalent_Atoms}
                     className="border rounded-md  px-2 py-1 w-10/12  text-black focus:outline-none  text-lg"
                   />
                 </div>
@@ -93,95 +123,49 @@ const Template1 = () => {
                   <input
                     name="Material thickness :"
                     className="border rounded-md  px-2 py-1 w-10/12  text-black focus:outline-none  text-lg"
-                    value={otherPara.Material_Thickness}
-                    placeholder="thickness in (nm)"
+                    value={otherPara?.Material_Thickness}
+                    placeholder="In (nm) default is 5nm"
                     type="number"
-                      onChange={(e) =>
-                        setOtherPara({
-                          ...otherPara,
-                          Material_Thickness: e.target.value,
-                        })
-                      }
+                    onChange={(e) =>
+                      setOtherPara({
+                        ...otherPara,
+                        Material_Thickness: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
             </div>
 
             {/*----------- Lattice Parameters --------   */}
-            <div className="mt-5">
-              <p className="text-lg block mt-3">Lattice Parameters &nbsp; :</p>
-              <div className="flex flex-col md:flex-row mt-3 gap-3">
-                <div className="basis-1/3">
-                  <div className="">
+            <p className="text-lg block mt-5">Lattice Parameters &nbsp; :</p>
+            <div className="mt-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {Gdata?.Lattice_Parameter?.map((item, index) => (
+                  <div className="" key={index}>
                     <input
-                      name=" :"
-                      defaultValue={Gdata.Lattice_Parameter[0]}
+                      name={item}
+                      defaultValue={item}
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
                     />
                   </div>
-                </div>
-                <div className="basis-1/3">
-                  <div className="">
-                    <input
-                      name=" :"
-                      defaultValue={Gdata.Lattice_Parameter[1]}
-                      className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
-                    />
-                  </div>
-                </div>
-                <div className="basis-1/3">
-                  <div className="">
-                    <input
-                      name=" :"
-                      defaultValue={Gdata.Lattice_Parameter[2]}
-                      className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col md:flex-row mt-3 gap-3">
-                <div className="basis-1/3">
-                  <div className="">
-                    <input
-                      name=" :"
-                      defaultValue={Gdata.Lattice_Parameter[3]}
-                      className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
-                    />
-                  </div>
-                </div>
-                <div className="basis-1/3">
-                  <div className="">
-                    <input
-                      name=""
-                      defaultValue={Gdata.Lattice_Parameter[4]}
-                      className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
-                    />
-                  </div>
-                </div>
-                <div className="basis-1/3">
-                  <div className="">
-                    <input
-                      name=""
-                      defaultValue={Gdata.Lattice_Parameter[5]}
-                      className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
-                    />
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
             {/*----------- G Vector Range --------   */}
-            <div className="mt-5">
-              <p className="text-lg block mt-3">G Vector Range &nbsp; :</p>
-              <div className="flex flex-col md:flex-row mt-3 gap-3">
-                <div className="basis-1/3">
+            <p className="text-lg block mt-5">G Vector Range &nbsp; :</p>
+            <div className="mt-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="">
                   <div className="">
                     <input
                       name="h_value"
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg pl"
-                      placeholder="Enter h value"
-                      value={otherPara.h_para}
+                      placeholder="Enter h value default is 4"
+                      value={otherPara?.h_para}
                       type="number"
+                      required
                       onChange={(e) =>
                         setOtherPara({
                           ...otherPara,
@@ -191,14 +175,15 @@ const Template1 = () => {
                     />
                   </div>
                 </div>
-                <div className="basis-1/3">
+                <div className="">
                   <div className="">
                     <input
                       name="k_value"
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
-                      placeholder="Enter k value"
-                      value={otherPara.k_para}
+                      placeholder="Enter k value default is 4"
+                      value={otherPara?.k_para}
                       type="number"
+                      required
                       onChange={(e) =>
                         setOtherPara({
                           ...otherPara,
@@ -208,14 +193,15 @@ const Template1 = () => {
                     />
                   </div>
                 </div>
-                <div className="basis-1/3">
+                <div className="">
                   <div className="">
                     <input
                       name="l_value"
                       className="border rounded-md px-2 py-1 w-11/12 text-black focus:outline-none  text-lg"
-                      placeholder="Enter l value"
-                      value={otherPara.l_para}
+                      placeholder="Enter l value default is 4"
+                      value={otherPara?.l_para}
                       type="number"
+                      required
                       onChange={(e) =>
                         setOtherPara({
                           ...otherPara,
@@ -251,8 +237,10 @@ const Template1 = () => {
             {/*----------- Buttons --------   */}
             <div className="flex flex-row justify-center gap-x-5 mt-10">
               <div className="">
-                <button className="rounded bg-red-500 text-white p-2 w-20 hover:shadow-lg" 
-                 onClick={handleOnMainPage}>
+                <button
+                  className="rounded bg-red-500 text-white p-2 w-20 hover:shadow-lg"
+                  onClick={handleOnMainPage}
+                >
                   Exit
                 </button>
               </div>

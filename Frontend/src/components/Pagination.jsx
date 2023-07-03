@@ -7,15 +7,13 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
   }
 
   return (
-    <nav>
-    <ul className='pagination'>
-      {pageNumbers.map(number => (
-        <li key={number}  onClick={() => paginate(number)}>
-            {number}
+    <ul className="">
+      {pageNumbers.map((number) => (
+        <li key={number} onClick={() => paginate(number)}>
+          {number}
         </li>
       ))}
     </ul>
-  </nav>
   );
 };
 

@@ -32,12 +32,16 @@ export const options = {
   scales: {
     y: {
       beginAtZero: true,
+      ticks: {
+        callback: function (value, index, values) {
+          return value.toExponential();
+        },
+      },
     },
   },
 };
 
-const Charts = ({ ChartData,ChartRef }) => {
-  // const chartRef = useRef(null)
+const Charts = ({ ChartData, ChartRef }) => {
   let string_hkl_list = [];
   ChartData?.final_hkl_list.forEach(myFunction);
   function myFunction(item) {
@@ -71,8 +75,8 @@ const Charts = ({ ChartData,ChartRef }) => {
 
   return (
     <>
-      <div className="border mt-10 bg-white m-10">
-        <Line options={options} data={data} ref={ChartRef}/>;
+      <div className="border mt-10 bg-white my-10 md:m-10">
+        <Line options={options} data={data} ref={ChartRef} />;
       </div>
     </>
   );
