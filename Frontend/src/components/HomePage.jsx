@@ -1,6 +1,9 @@
 import React, { useContext, useState } from "react";
+
 import { stateContext } from "../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
+
+import { URL } from "../constants";
 import FileInput from "./FileInput";
 import axios from "axios";
 
@@ -24,7 +27,7 @@ const HomePage2 = () => {
       body: JSON.stringify({ fileData }),
     };
     const response = await axios.post(
-      "http://127.0.0.1:5000/file_data",
+      `${URL}/file_data`,
       requestOptions
     );
     if (response) {
