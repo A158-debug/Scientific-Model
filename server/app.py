@@ -18,10 +18,11 @@ def App():
 @app.route("/file_data",methods=['POST'])
 def File_Read_Function():
     FileInput = request.get_json()   # parse the incomming json request
-    FileInputDictonary = json.loads(FileInput['body'])
+
+    # FileInputDictonary = json.loads(FileInput['body'])
     
     global extracted_info_data
-    class_Extract_Structure_Info = Extract_Structure_Info(FileInputDictonary['fileData'])
+    class_Extract_Structure_Info = Extract_Structure_Info(FileInput['fileData'])
     extracted_info_data = class_Extract_Structure_Info.Extract_Info()
 
     return extracted_info_data

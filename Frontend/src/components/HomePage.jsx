@@ -26,6 +26,8 @@ const HomePage2 = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ fileData }),
     };
+    
+    console.log(requestOptions.body)
     const response = await axios.post(
       `${URL}/file_data`,
       requestOptions
