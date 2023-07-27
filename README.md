@@ -7,7 +7,7 @@ geometry in order to obtain the maximum attainable energy-loss
 magnetic chiral dichroism (EMCD) signal for a given crystal
 structure using Transmission Electron Microscopy.
 
-Foe testing you can use FeGe.struct or BaFe12O19.struct in the repo
+For testing you can use FeGe.struct or BaFe12O19.struct in the repo
 
 ![App Screenshot](https://github.com/A158-debug/G_Optimization_Scientific_Model/blob/master/Frontend/src/images/Screenshot%202023-07-23%20004452.png)
 ![App Screenshot](https://github.com/A158-debug/G_Optimization_Scientific_Model/blob/master/Frontend/src/images/Screenshot%202023-07-23%20015933.png)
