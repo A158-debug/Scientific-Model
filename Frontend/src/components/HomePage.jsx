@@ -71,6 +71,9 @@ const HomePage2 = () => {
             magnetic chiral dichroism (EMCD) signal for a given crystal
             structure using Transmission Electron Microscopy.
           </p>
+          <p className="text-xl text-left my-5 text-slate-200 ">
+           Don't have file ? <a href="https://github.com/A158-debug/G_Optimization_Scientific_Model"> Download from Github</a>
+          </p>
         </div>
         <FileInput />
         <div className="mt-5 text-center">

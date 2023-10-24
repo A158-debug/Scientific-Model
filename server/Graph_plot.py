@@ -30,8 +30,8 @@ def Plot_GPoints_graph(cnm,thickness_range,number_of_points_to_plot,list_contain
         final_2d_list_y = []
         final_parameter_list = [] # 2d list , h , k , l , PSF , Extinction_distance
         for j in range(number_of_points_to_plot):
-            #y axis is optimized function 
-            #x axis is thickness range
+            # y axis is optimized function 
+            # x axis is thickness range
             # optimized_function = [(((Optimized_Extinction_list[j]*1e-9)/ (np.pi*cnm)) *  ((np.sin(((np.pi*x*1e-9)/(Optimized_Extinction_list[j]*1e-9))))**2)*np.abs(Optimized_PSF_list[j]) ) for x in thickness_range]  
             optimized_function = []
             x_axis =[]

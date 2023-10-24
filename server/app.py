@@ -1,7 +1,7 @@
 import json
 
 from flask_cors import CORS
-from flask import Flask, request
+from flask import Flask, request,jsonify
 
 from G_Optimization_class import Do_G_Optimization
 from Load_structure_info_new import Extract_Structure_Info
@@ -11,21 +11,21 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def App():
     return "Welcome to Server"
 
 @app.route("/file_data",methods=['POST'])
 def File_Read_Function():
-    FileInput = request.get_json()   # parse the incomming json request
+    FileInput = request.get_json() 
 
-    # FileInputDictonary = json.loads(FileInput['body'])
+    FileInputDictonary = json.loads(FileInput['body'])
     
     global extracted_info_data
-    class_Extract_Structure_Info = Extract_Structure_Info(FileInput['fileData'])
+    class_Extract_Structure_Info = Extract_Structure_Info(FileInputDictonary['fileData'])
     extracted_info_data = class_Extract_Structure_Info.Extract_Info()
 
-    return extracted_info_data
+    return jsonify(extracted_info_data)
 
     
 @app.route("/g_optimized_values",methods=['GET','POST'])
